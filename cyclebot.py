@@ -1,4 +1,5 @@
 import logging
+from collections import defaultdict
 from datetime import date, datetime, timedelta
 from logging.config import dictConfig
 
@@ -7,6 +8,12 @@ from pytz import timezone
 
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
+HITS = {
+    'single',
+    'double',
+    'triple',
+    'home run',
+}
 
 dictConfig({
     'version': 1,
@@ -85,8 +92,22 @@ def cyclewatch():
         response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1.1/game/{game_key}/feed/live')
         data = response.json()
 
-        score = data['liveData']['linescore']['teams']
-        logger.info(score)
+        # plays are ordered chronologically
+        plays = data['liveData']['plays']['allPlays']
+        batters = defaultdict(set)
+        for play in plays:
+            event = play['result'].get('event', '').lower()
+            if event in HITS:
+                batter = play['matchup']['batter']['fullName']
+                batters[batter].add(event)
+
+        inning_ordinal = data['liveData']['linescore']['currentInningOrdinal']
+        for batter, hits in batters.items():
+            # TODO: generate message like 'Whit Merrifield is 3-3 with a HR, 3B, and 2B in the 6th inning'
+            # requires hits/at-bats, order of hits
+            hit_count = len(hits)
+            if hit_count >= 2:
+                logger.info(f'{batter} has {hits} in the {inning_ordinal} inning')
 
 
 if __name__ == '__main__':
