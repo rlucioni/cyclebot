@@ -118,7 +118,7 @@ def cyclewatch():
             # TODO: generate message like 'Whit Merrifield is 3-3 with a HR, 3B, and 2B in the 6th inning'
             # requires hits/at-bats, order of hits
             hit_count = len(hits)
-            if hit_count >= 3:
+            if hit_count >= 2:
                 # TODO: prevent message from being sent more than once by caching
                 # on game_key-batter
                 joined_hits = ', '.join(hits)
