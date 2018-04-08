@@ -1,0 +1,29 @@
+{
+    "prod": {
+        "apigateway_enabled": false,
+        "aws_region": "us-east-1",
+        "events": [{
+            "function": "cyclebot.cyclewatch",
+            // https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
+            "expression": "rate(10 minutes)"
+        }],
+        "exclude": [
+            ".flake8",
+            ".git/*",
+            ".gitignore",
+            ".python-version",
+            "LICENSE",
+            "Makefile",
+            "README.md",
+            "requirements.txt",
+            "zappa_settings.json",
+        ],
+        "keep_warm": false,
+        "memory_size": 128,
+        "profile_name": "default",
+        "project_name": "cyclebot",
+        "runtime": "python3.6",
+        "s3_bucket": "cyclebot",
+        "timeout_seconds": 60,
+    }
+}
