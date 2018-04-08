@@ -1,12 +1,15 @@
 import logging
+import os
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from logging.config import dictConfig
 
 import requests
 from pytz import timezone
+from slackclient import SlackClient
 
 
+SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
 HITS = {
     'single',
@@ -41,6 +44,15 @@ dictConfig({
 })
 
 logger = logging.getLogger(__name__)
+slack = SlackClient(SLACK_API_TOKEN)
+
+
+def post_message(message, channel='#sandbox'):
+    slack.api_call(
+        'chat.postMessage',
+        channel=channel,
+        text=message
+    )
 
 
 def get_formatted_dates():
@@ -107,7 +119,10 @@ def cyclewatch():
             # requires hits/at-bats, order of hits
             hit_count = len(hits)
             if hit_count >= 2:
-                logger.info(f'{batter} has {hits} in the {inning_ordinal} inning')
+                # TODO: prevent message from being sent more than once by caching
+                # on game_key-batter
+                joined_hits = ', '.join(hits)
+                post_message(f'{batter} has {joined_hits}, in the {inning_ordinal} inning')
 
 
 if __name__ == '__main__':
