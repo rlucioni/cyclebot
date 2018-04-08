@@ -1,0 +1,266 @@
+{
+  "result" : {
+    "type" : "atBat",
+    "event" : "Single",
+    "description" : "Kevin Kiermaier singles on a ground ball to right fielder Aaron Judge.  ",
+    "rbi" : 0
+  },
+  "about" : {
+    "atBatIndex" : 1,
+    "halfInning" : "top",
+    "inning" : 1,
+    "startTime" : "2018-04-04T18:39:23.000Z",
+    "endTime" : "2018-04-04T18:40:27.000Z",
+    "isComplete" : true,
+    "isScoringPlay" : false,
+    "hasReview" : false,
+    "hasOut" : false,
+    "captivatingIndex" : 33
+  },
+  "count" : {
+    "balls" : 1,
+    "strikes" : 1,
+    "outs" : 1
+  },
+  "matchup" : {
+    "batter" : {
+      "id" : 595281,
+      "fullName" : "Kevin Kiermaier",
+      "link" : "/api/v1/people/595281"
+    },
+    "batSide" : {
+      "code" : "L",
+      "description" : "Left"
+    },
+    "pitcher" : {
+      "id" : 622663,
+      "fullName" : "Luis Severino",
+      "link" : "/api/v1/people/622663"
+    },
+    "pitchHand" : {
+      "code" : "R",
+      "description" : "Right"
+    },
+    "batterHotColdZoneStats" : {
+      "stats" : [ {
+        "type" : {
+          "displayName" : "hotColdZones"
+        },
+        "group" : {
+          "displayName" : "hitting"
+        },
+        "splits" : [ ]
+      } ]
+    },
+    "batterHotColdZones" : [ ],
+    "pitcherHotColdZones" : [ ],
+    "splits" : { }
+  },
+  "pitchIndex" : [ 0, 1, 2 ],
+  "actionIndex" : [ ],
+  "runnerIndex" : [ 0 ],
+  "runners" : [ {
+    "movement" : {
+      "start" : null,
+      "end" : "1B"
+    },
+    "details" : {
+      "event" : "Single",
+      "runner" : {
+        "id" : 595281,
+        "fullName" : "Kevin Kiermaier",
+        "link" : "/api/v1/people/595281"
+      },
+      "isScoringEvent" : false,
+      "rbi" : false,
+      "earned" : false
+    }
+  } ],
+  "playEvents" : [ {
+    "details" : {
+      "call" : {
+        "code" : "S",
+        "description" : "Called Strike"
+      },
+      "description" : "Called Strike",
+      "code" : "C",
+      "ballColor" : "rgba(170, 21, 11, 1.0)",
+      "trailColor" : "rgba( 0, 0, 254, 1.0)",
+      "isInPlay" : false,
+      "isStrike" : true,
+      "isBall" : false,
+      "type" : {
+        "code" : "SL",
+        "description" : "Slider"
+      },
+      "hasReview" : false
+    },
+    "count" : {
+      "balls" : 0,
+      "strikes" : 1
+    },
+    "pitchData" : {
+      "startSpeed" : 86.3,
+      "endSpeed" : 79.1,
+      "nastyFactor" : 58.0,
+      "strikeZoneTop" : 3.411,
+      "strikeZoneBottom" : 1.565,
+      "coordinates" : {
+        "aY" : 27.1724060260877,
+        "aZ" : -39.7947344651534,
+        "pfxX" : 5.940205595069664,
+        "pfxZ" : -4.824859044405912,
+        "pX" : 0.326953487461968,
+        "pZ" : 2.06132610886658,
+        "vX0" : 4.5305324404068,
+        "vY0" : -125.376059317571,
+        "vZ0" : -1.42255477409581,
+        "x" : 105.47,
+        "y" : 183.14,
+        "x0" : -2.27989467778809,
+        "y0" : 50.0,
+        "z0" : 5.90642016748613,
+        "aX" : 9.38233441777962
+      },
+      "breaks" : {
+        "breakAngle" : -14.3,
+        "breakLength" : 10.6,
+        "breakY" : 23.8
+      }
+    },
+    "index" : 1,
+    "pfxId" : "180404_183951",
+    "playId" : "24e6074a-6bf6-4a7e-8eb6-76af2b5d470d",
+    "pitchNumber" : 1,
+    "startTime" : "2018-04-04T18:39:45.000Z",
+    "endTime" : "2018-04-04T18:39:58.000Z",
+    "isPitch" : true,
+    "type" : "pitch"
+  }, {
+    "details" : {
+      "call" : {
+        "code" : "B",
+        "description" : "Ball"
+      },
+      "description" : "Ball",
+      "code" : "B",
+      "ballColor" : "rgba(39, 161, 39, 1.0)",
+      "trailColor" : "rgba(188, 0, 33, 1.0)",
+      "isInPlay" : false,
+      "isStrike" : false,
+      "isBall" : true,
+      "type" : {
+        "code" : "FF",
+        "description" : "Four-Seam Fastball"
+      },
+      "hasReview" : false
+    },
+    "count" : {
+      "balls" : 1,
+      "strikes" : 1
+    },
+    "pitchData" : {
+      "startSpeed" : 97.8,
+      "endSpeed" : 88.4,
+      "nastyFactor" : 59.0,
+      "strikeZoneTop" : 3.411,
+      "strikeZoneBottom" : 1.565,
+      "coordinates" : {
+        "aY" : 34.1997732563605,
+        "aZ" : -10.464706104148,
+        "pfxX" : -4.730403435948636,
+        "pfxZ" : 10.64516508912912,
+        "pX" : -1.12066442784124,
+        "pZ" : 3.76128791163102,
+        "vX0" : 4.93085739630283,
+        "vY0" : -142.278240298106,
+        "vZ0" : -3.84904647788623,
+        "x" : 159.72,
+        "y" : 137.19,
+        "x0" : -2.26587956492494,
+        "y0" : 50.0,
+        "z0" : 5.80046953909046,
+        "aX" : -9.64700380582486
+      },
+      "breaks" : {
+        "breakAngle" : 36.7,
+        "breakLength" : 2.8,
+        "breakY" : 23.8
+      }
+    },
+    "index" : 2,
+    "pfxId" : "180404_184005",
+    "playId" : "4d4185cf-c784-45e2-95a4-f0452e640e5c",
+    "pitchNumber" : 2,
+    "startTime" : "2018-04-04T18:39:58.000Z",
+    "endTime" : "2018-04-04T18:40:12.000Z",
+    "isPitch" : true,
+    "type" : "pitch"
+  }, {
+    "details" : {
+      "call" : {
+        "code" : "X",
+        "description" : "In play, no out"
+      },
+      "description" : "In play, no out",
+      "code" : "D",
+      "ballColor" : "rgba(26, 86, 190, 1.0)",
+      "trailColor" : "rgba( 0, 85, 254, 1.0)",
+      "isInPlay" : true,
+      "isStrike" : false,
+      "isBall" : false,
+      "type" : {
+        "code" : "CH",
+        "description" : "Changeup"
+      },
+      "hasReview" : false
+    },
+    "count" : {
+      "balls" : 1,
+      "strikes" : 1
+    },
+    "pitchData" : {
+      "startSpeed" : 89.9,
+      "endSpeed" : 81.8,
+      "nastyFactor" : 24.0,
+      "strikeZoneTop" : 3.411,
+      "strikeZoneBottom" : 1.565,
+      "coordinates" : {
+        "aY" : 28.2571858135309,
+        "aZ" : -24.952396755468,
+        "pfxX" : -9.48238493518296,
+        "pfxZ" : 4.187107293890592,
+        "pX" : -0.335606991724601,
+        "pZ" : 2.40195805977072,
+        "vX0" : 7.1908078014443,
+        "vY0" : -130.690846801644,
+        "vZ0" : -3.48431999979324,
+        "x" : 129.79,
+        "y" : 173.93,
+        "x0" : -1.89461260593671,
+        "y0" : 50.0,
+        "z0" : 5.63233951851764,
+        "aX" : -16.3546041307563
+      },
+      "breaks" : {
+        "breakAngle" : 30.1,
+        "breakLength" : 7.0,
+        "breakY" : 23.8
+      }
+    },
+    "hitData" : {
+      "launchSpeed" : 92.4,
+      "launchAngle" : 5.25,
+      "totalDistance" : 97.0,
+      "coordinates" : { }
+    },
+    "index" : 3,
+    "pfxId" : "180404_184019",
+    "playId" : "c85f70be-9cbf-4a73-a3eb-0a297d58142a",
+    "pitchNumber" : 3,
+    "startTime" : "2018-04-04T18:40:12.000Z",
+    "endTime" : "2018-04-04T18:40:27.000Z",
+    "isPitch" : true,
+    "type" : "pitch"
+  } ]
+}
