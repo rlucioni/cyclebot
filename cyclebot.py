@@ -2,21 +2,14 @@ import logging
 import os
 from collections import defaultdict
 from datetime import date, datetime, timedelta
+from hashlib import md5
 from logging.config import dictConfig
 
 import requests
 from pytz import timezone
+from redis import StrictRedis
 from slackclient import SlackClient
 
-
-SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']
-MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
-HITS = {
-    'single',
-    'double',
-    'triple',
-    'home run',
-}
 
 dictConfig({
     'version': 1,
@@ -44,7 +37,22 @@ dictConfig({
 })
 
 logger = logging.getLogger(__name__)
+
+SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']
 slack = SlackClient(SLACK_API_TOKEN)
+
+CACHE_VERSION = 1
+REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+redis = StrictRedis(host=REDIS_HOST, password=REDIS_PASSWORD)
+
+MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
+HITS = {
+    'single',
+    'double',
+    'triple',
+    'home run',
+}
 
 
 def post_message(message, channel='#sandbox'):
@@ -66,6 +74,14 @@ def get_formatted_dates():
     yesterday = today - timedelta(days=1)
 
     return [yesterday.isoformat(), today.isoformat()]
+
+
+def hash(text):
+    return md5(text.encode('utf-8')).hexdigest()
+
+
+def make_key(game_key, batter, hits):
+    return f'{CACHE_VERSION}-{game_key}-{hash(batter)}-{len(hits)}'
 
 
 def cyclewatch():
@@ -113,16 +129,23 @@ def cyclewatch():
                 batter = play['matchup']['batter']['fullName']
                 batters[batter].add(event)
 
-        inning_ordinal = data['liveData']['linescore']['currentInningOrdinal']
+        inning_ordinal = data['liveData']['linescore'].get('currentInningOrdinal')
         for batter, hits in batters.items():
             # TODO: generate message like 'Whit Merrifield is 3-3 with a HR, 3B, and 2B in the 6th inning'
             # requires hits/at-bats, order of hits
             hit_count = len(hits)
             if hit_count >= 2:
-                # TODO: prevent message from being sent more than once by caching
-                # on game_key-batter
                 joined_hits = ', '.join(hits)
-                post_message(f'{batter} has {joined_hits}, in the {inning_ordinal} inning')
+                cache_key = make_key(game_key, batter, hits)
+
+                in_cache = bool(redis.get(cache_key))
+                if in_cache:
+                    logger.info(f'skipping {batter} with {joined_hits}, in cache')
+                    continue
+
+                logger.info(f'notifying about {batter} with {joined_hits}')
+                redis.set(cache_key, 1, 3600 * 24)
+                post_message(f'{batter} has {joined_hits} in the {inning_ordinal} inning')
 
 
 if __name__ == '__main__':
