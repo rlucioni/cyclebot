@@ -43,8 +43,9 @@ slack = SlackClient(SLACK_API_TOKEN)
 
 CACHE_VERSION = 1
 REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
+REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
-redis = StrictRedis(host=REDIS_HOST, password=REDIS_PASSWORD)
+redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
 HITS = {
