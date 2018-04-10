@@ -1,3 +1,6 @@
+cyclebot:
+	python cyclebot.py
+
 deploy:
 	zappa deploy prod
 

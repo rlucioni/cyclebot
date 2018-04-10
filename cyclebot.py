@@ -1,8 +1,6 @@
 import logging
 import os
-from collections import defaultdict
 from datetime import date, datetime, timedelta
-from hashlib import md5
 from logging.config import dictConfig
 
 import requests
@@ -49,19 +47,11 @@ redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
 HITS = {
-    'single',
-    'double',
-    'triple',
-    'home run',
+    'single': '1B',
+    'double': '2B',
+    'triple': '3B',
+    'home run': 'HR',
 }
-
-
-def post_message(message, channel='#sandbox'):
-    slack.api_call(
-        'chat.postMessage',
-        channel=channel,
-        text=message
-    )
 
 
 def get_formatted_dates():
@@ -77,12 +67,16 @@ def get_formatted_dates():
     return [yesterday.isoformat(), today.isoformat()]
 
 
-def hash(text):
-    return md5(text.encode('utf-8')).hexdigest()
+def make_key(game_key, player_id, unique_hit_count):
+    return f'{CACHE_VERSION}-{game_key}-{player_id}-{unique_hit_count}'
 
 
-def make_key(game_key, batter, hits):
-    return f'{CACHE_VERSION}-{game_key}-{hash(batter)}-{len(hits)}'
+def post_message(message, channel='#sandbox'):
+    slack.api_call(
+        'chat.postMessage',
+        channel=channel,
+        text=message
+    )
 
 
 def cyclewatch():
@@ -95,13 +89,12 @@ def cyclewatch():
         response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/schedule?sportId=1&date={formatted_date}')
         data = response.json()
 
-        # Returned dates array can be empty. It can also contain multiple dates,
+        # Returned dates list can be empty. It can also contain multiple dates,
         # so we filter to make sure we get the date we want.
-        returned_dates = data['dates']
         games = []
-        for returned_date in returned_dates:
-            if returned_date['date'] == formatted_date:
-                games = returned_date['games']
+        for day in data['dates']:
+            if day['date'] == formatted_date:
+                games = day['games']
 
         for game in games:
             game_key = game['gamePk']
@@ -121,32 +114,56 @@ def cyclewatch():
         response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1.1/game/{game_key}/feed/live')
         data = response.json()
 
-        # plays are ordered chronologically
+        players = {}
+        for team in data['liveData']['boxscore']['teams'].values():
+            for player in team['players'].values():
+                player_id = player['person']['id']
+                players[player_id] = {
+                    'name': player['person']['fullName'],
+                    'hits': player['stats']['batting'].get('hits', 0),
+                    'at_bats': player['stats']['batting'].get('atBats', 0),
+                    'unique_hits': [],
+                }
+
+        # plays come sorted in chronological order
         plays = data['liveData']['plays']['allPlays']
-        batters = defaultdict(set)
         for play in plays:
             event = play['result'].get('event', '').lower()
-            if event in HITS:
-                batter = play['matchup']['batter']['fullName']
-                batters[batter].add(event)
+            hit_code = HITS.get(event)
+
+            if hit_code:
+                batter_id = play['matchup']['batter']['id']
+                batter = players[batter_id]
+
+                if hit_code not in batter['unique_hits']:
+                    batter['unique_hits'].append(hit_code)
 
         inning_ordinal = data['liveData']['linescore'].get('currentInningOrdinal')
-        for batter, hits in batters.items():
-            # TODO: generate message like 'Whit Merrifield is 3-3 with a HR, 3B, and 2B in the 6th inning'
-            # requires hits/at-bats, order of hits
-            hit_count = len(hits)
-            if hit_count >= 2:
-                joined_hits = ', '.join(hits)
-                cache_key = make_key(game_key, batter, hits)
+        for player_id, player in players.items():
+            unique_hits = player['unique_hits']
+            unique_hit_count = len(unique_hits)
 
-                in_cache = bool(redis.get(cache_key))
-                if in_cache:
-                    logger.info(f'skipping {batter} with {joined_hits}, in cache')
+            # TODO: message if player completes the cycle
+            if unique_hit_count >= 2:
+                name = player['name']
+                joined_hits = ', '.join(unique_hits)
+
+                cache_key = make_key(game_key, player_id, unique_hit_count)
+                is_cached = bool(redis.get(cache_key))
+
+                if is_cached:
+                    logger.info(f'skipping {name} with {unique_hit_count} unique hits, in cache')
                     continue
 
-                logger.info(f'notifying about {batter} with {joined_hits}')
+                logger.info(f'notifying about {name} with {joined_hits}')
+
                 redis.set(cache_key, 1, 3600 * 24)
-                post_message(f'{batter} has {joined_hits} in the {inning_ordinal} inning')
+
+                hits = player['hits']
+                at_bats = player['at_bats']
+                post_message(
+                    f'CYCLE ALERT: {name} {hits}-{at_bats} with {joined_hits} in the {inning_ordinal} inning'
+                )
 
 
 if __name__ == '__main__':
