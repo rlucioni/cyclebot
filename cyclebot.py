@@ -1,6 +1,7 @@
 import logging
 import os
 from datetime import date, datetime, timedelta
+from hashlib import md5
 from logging.config import dictConfig
 
 import requests
@@ -67,8 +68,13 @@ def get_formatted_dates():
     return [yesterday.isoformat(), today.isoformat()]
 
 
+def hash(text):
+    return md5(text.encode('utf-8')).hexdigest()
+
+
 def make_key(game_key, player_id, unique_hit_count):
-    return f'{CACHE_VERSION}-{game_key}-{player_id}-{unique_hit_count}'
+    key = f'{CACHE_VERSION}-{game_key}-{player_id}-{unique_hit_count}'
+    return hash(key)
 
 
 def post_message(message, channel='#sandbox'):
