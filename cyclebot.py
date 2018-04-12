@@ -40,7 +40,8 @@ logger = logging.getLogger(__name__)
 SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']
 slack = SlackClient(SLACK_API_TOKEN)
 
-CACHE_VERSION = 1
+CACHE_VERSION = str(os.environ.get('CACHE_VERSION', 1))
+CACHE_EXPIRE_SECONDS = int(os.environ.get('CACHE_EXPIRE_SECONDS', 3600 * 24))
 REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
 REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
@@ -80,7 +81,7 @@ def hash(text):
 
 
 def make_key(*args):
-    key = '-'.join([str(CACHE_VERSION)] + [str(arg) for arg in args])
+    key = '-'.join([CACHE_VERSION] + [str(arg) for arg in args])
     return hash(key)
 
 
@@ -105,7 +106,7 @@ def handle_captivating(play):
             return
 
         logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
-        redis.set(cache_key, 1, 3600 * 24)
+        redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
         response = requests.get(MLB_SEARCH_TEMPLATE.format(play_uuid=play_uuid))
         data = response.json()
@@ -199,7 +200,7 @@ def cyclewatch():
                     continue
 
                 logger.info(f'notifying about {name} with {joined_hits}')
-                redis.set(cache_key, 1, 3600 * 24)
+                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
                 hits = player['hits']
                 at_bats = player['at_bats']
