@@ -102,21 +102,27 @@ def handle_captivating(play):
         is_cached = bool(redis.get(cache_key))
 
         if is_cached:
-            logger.info(f'skipping play {play_uuid} with captivating index of {captivating_index}')
+            logger.info(f'skipping play {play_uuid} with captivating index of {captivating_index}, in cache')
             return
-
-        logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
-        redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
         response = requests.get(MLB_SEARCH_TEMPLATE.format(play_uuid=play_uuid))
         data = response.json()
-        asset_id = data['docs'][0]['asset_id']
+        try:
+            asset_id = data['docs'][0]['asset_id']
+        except:
+            logger.info(
+                f'skipping play {play_uuid} with captivating index of {captivating_index}, highlight unavailable'
+            )
+            return
 
         response = requests.get(MLB_CONTENT_TEMPLATE.format(asset_id=asset_id))
         data = response.json()
         for playback in data['playbacks']:
             playback_url = playback['url']
             if PLAYBACK_RESOLUTION in playback_url:
+                logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
+                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
+
                 description = data['description']
                 post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
 
