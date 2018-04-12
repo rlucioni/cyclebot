@@ -80,7 +80,7 @@ def hash(text):
 
 
 def make_key(*args):
-    key = '-'.join([CACHE_VERSION] + [str(arg) for arg in args])
+    key = '-'.join([str(CACHE_VERSION)] + [str(arg) for arg in args])
     return hash(key)
 
 
