@@ -47,12 +47,19 @@ REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
 redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
+MLB_SEARCH_TEMPLATE = 'https://search-api.mlb.com/svc/search/v2/mlb_global_sitesearch_en/query?q={play_uuid}'
+MLB_CONTENT_TEMPLATE = 'https://content.mlb.com/mlb/item/id/v1/{asset_id}/details/web-v1.json'
+
 HITS = {
     'single': '1B',
     'double': '2B',
     'triple': '3B',
     'home run': 'HR',
 }
+
+CAPTIVATING_INDEX_THRESHOLD = int(os.environ.get('CAPTIVATING_INDEX_THRESHOLD', 70))
+PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
+UNIQUE_HIT_COUNT_THRESHOLD = int(os.environ.get('UNIQUE_HIT_COUNT_THRESHOLD', 2))
 
 
 def get_formatted_dates():
@@ -72,8 +79,8 @@ def hash(text):
     return md5(text.encode('utf-8')).hexdigest()
 
 
-def make_key(game_key, player_id, unique_hit_count):
-    key = f'{CACHE_VERSION}-{game_key}-{player_id}-{unique_hit_count}'
+def make_key(*args):
+    key = '-'.join([CACHE_VERSION] + [str(arg) for arg in args])
     return hash(key)
 
 
@@ -83,6 +90,34 @@ def post_message(message, channel='#sandbox'):
         channel=channel,
         text=message
     )
+
+
+def handle_captivating(play):
+    captivating_index = play['about'].get('captivatingIndex', 0)
+    if captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
+        play_uuid = play['playEvents'][-1]['playId']
+
+        cache_key = make_key(play_uuid)
+        is_cached = bool(redis.get(cache_key))
+
+        if is_cached:
+            logger.info(f'skipping play {play_uuid} with captivating index of {captivating_index}')
+            return
+
+        logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
+        redis.set(cache_key, 1, 3600 * 24)
+
+        response = requests.get(MLB_SEARCH_TEMPLATE.format(play_uuid=play_uuid))
+        data = response.json()
+        asset_id = data['docs'][0]['asset_id']
+
+        response = requests.get(MLB_CONTENT_TEMPLATE.format(asset_id=asset_id))
+        data = response.json()
+        for playback in data['playbacks']:
+            playback_url = playback['url']
+            if PLAYBACK_RESOLUTION in playback_url:
+                description = data['description']
+                post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
 
 
 def cyclewatch():
@@ -134,6 +169,8 @@ def cyclewatch():
         # plays come sorted in chronological order
         plays = data['liveData']['plays']['allPlays']
         for play in plays:
+            handle_captivating(play)
+
             event = play['result'].get('event', '').lower()
             hit_code = HITS.get(event)
 
@@ -150,7 +187,7 @@ def cyclewatch():
             unique_hit_count = len(unique_hits)
 
             # TODO: message if player completes the cycle
-            if unique_hit_count >= 2:
+            if unique_hit_count >= UNIQUE_HIT_COUNT_THRESHOLD:
                 name = player['name']
                 joined_hits = ', '.join(unique_hits)
 
@@ -162,7 +199,6 @@ def cyclewatch():
                     continue
 
                 logger.info(f'notifying about {name} with {joined_hits}')
-
                 redis.set(cache_key, 1, 3600 * 24)
 
                 hits = player['hits']
