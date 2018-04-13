@@ -5,6 +5,7 @@ from hashlib import md5
 from logging.config import dictConfig
 
 import requests
+from praw import Reddit
 from pytz import timezone
 from redis import StrictRedis
 from slackclient import SlackClient
@@ -46,6 +47,19 @@ REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
 REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
 redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
+
+REDDIT_CLIENT_ID = os.environ.get('REDDIT_CLIENT_ID', '')
+REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET', '')
+REDDIT_USERAGENT = os.environ.get('REDDIT_USERAGENT', '')
+REDDIT_USERNAME = os.environ.get('REDDIT_USERNAME', '')
+REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD', '')
+reddit = Reddit(
+    client_id=REDDIT_CLIENT_ID,
+    client_secret=REDDIT_CLIENT_SECRET,
+    user_agent=REDDIT_USERAGENT,
+    username=REDDIT_USERNAME,
+    password=REDDIT_PASSWORD,
+)
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
 MLB_SEARCH_TEMPLATE = 'https://search-api.mlb.com/svc/search/v2/mlb_global_sitesearch_en/query?q={play_uuid}'
