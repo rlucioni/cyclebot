@@ -5,6 +5,7 @@ from hashlib import md5
 from logging.config import dictConfig
 
 import requests
+from praw import Reddit
 from pytz import timezone
 from redis import StrictRedis
 from slackclient import SlackClient
@@ -46,6 +47,30 @@ REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
 REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
 redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
+
+REDDIT_CLIENT_ID = os.environ.get('REDDIT_CLIENT_ID')
+REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
+REDDIT_USERAGENT = os.environ.get('REDDIT_USERAGENT')
+REDDIT_USERNAME = os.environ.get('REDDIT_USERNAME')
+REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD')
+
+
+class NoopSubreddit:
+    def submit(self, *args, **kwargs):
+        pass
+
+
+if REDDIT_USERNAME and REDDIT_PASSWORD:
+    reddit = Reddit(
+        client_id=REDDIT_CLIENT_ID,
+        client_secret=REDDIT_CLIENT_SECRET,
+        user_agent=REDDIT_USERAGENT,
+        username=REDDIT_USERNAME,
+        password=REDDIT_PASSWORD,
+    )
+    subreddit = reddit.subreddit('baseball')
+else:
+    subreddit = NoopSubreddit()
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
 MLB_SEARCH_TEMPLATE = 'https://search-api.mlb.com/svc/search/v2/mlb_global_sitesearch_en/query?q={play_uuid}'
@@ -93,6 +118,21 @@ def post_message(message, channel='#sandbox'):
     )
 
 
+def submit_link(title, url):
+    try:
+        # https://praw.readthedocs.io/en/latest/code_overview/models/subreddit.html#praw.models.Subreddit.submit
+        # TODO: send shortlink to slack?
+        # https://praw.readthedocs.io/en/latest/code_overview/models/submission.html#praw.models.Submission.shortlink
+        subreddit.submit(
+            title,
+            url=url,
+            resubmit=False,
+            send_replies=False,
+        )
+    except:
+        logger.exception('submit to reddit failed')
+
+
 def handle_captivating(play):
     captivating_index = play['about'].get('captivatingIndex', 0)
     if captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
@@ -125,6 +165,7 @@ def handle_captivating(play):
 
                 description = data['description']
                 post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
+                submit_link(description, playback_url)
 
 
 def cyclewatch():
