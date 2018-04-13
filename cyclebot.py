@@ -57,7 +57,7 @@ REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD')
 
 class NoopSubreddit:
     def submit(self, *args, **kwargs):
-        pass
+        logger.info('no-op submit, reddit is disabled')
 
 
 if REDDIT_USERNAME and REDDIT_PASSWORD:
