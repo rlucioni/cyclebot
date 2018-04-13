@@ -159,12 +159,11 @@ def handle_captivating(play):
             playback_url = playback['url']
             if PLAYBACK_RESOLUTION in playback_url:
                 logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
+                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
                 description = data['description']
                 post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
                 submit_link(description, playback_url)
-
-                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
 
 def cyclewatch():
@@ -246,14 +245,13 @@ def cyclewatch():
                     continue
 
                 logger.info(f'notifying about {name} with {joined_hits}')
+                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
                 hits = player['hits']
                 at_bats = player['at_bats']
                 post_message(
                     f'CYCLE ALERT: {name} {hits}-{at_bats} with {joined_hits} in the {inning_ordinal} inning'
                 )
-
-                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
 
 if __name__ == '__main__':
