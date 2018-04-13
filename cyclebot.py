@@ -120,6 +120,7 @@ def post_message(message, channel='#sandbox'):
 
 def submit_link(title, url):
     try:
+        # https://praw.readthedocs.io/en/latest/code_overview/models/subreddit.html#praw.models.Subreddit.submit
         subreddit.submit(
             title,
             url=url,
