@@ -174,7 +174,7 @@ def cyclewatch():
             # valid states: 'preview', 'live', 'final'
             state = game['status']['abstractGameState'].lower()
             if state != 'live':
-                logger.info(f'skipping game {game_key}, state is {state}')
+                logger.info(f'ignoring game {game_key}, state is {state}')
                 continue
 
             # TODO: ignore seriesDescription == 'Spring Training'
@@ -301,7 +301,7 @@ def cyclewatch():
                 is_cached = bool(redis.get(cache_key))
 
                 if is_cached:
-                    logger.info(f'skipping {name} with {unique_hit_count} unique hits, in cache')
+                    logger.info(f'ignoring {name} with {unique_hit_count} unique hits, in cache')
                     continue
 
                 logger.info(f'notifying about {name} with {joined_hits}')
