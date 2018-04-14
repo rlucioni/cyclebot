@@ -1,5 +1,5 @@
 clean:
-	python clean.py
+	python cyclebot.py clean
 
 cyclebot:
 	python cyclebot.py

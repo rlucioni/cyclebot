@@ -2,6 +2,9 @@
     "prod": {
         "apigateway_enabled": false,
         "aws_region": "us-east-1",
+        "callbacks": {
+            "post": "cyclebot.clean",
+        },
         "events": [{
             "function": "cyclebot.poll",
             // https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
@@ -12,6 +15,7 @@
             ".git/*",
             ".gitignore",
             ".python-version",
+            "clean.py",
             "examples/*",
             "LICENSE",
             "Makefile",
