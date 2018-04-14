@@ -38,15 +38,42 @@ dictConfig({
 
 logger = logging.getLogger(__name__)
 
-SLACK_API_TOKEN = os.environ['SLACK_API_TOKEN']
-slack = SlackClient(SLACK_API_TOKEN)
+
+SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
+
+
+class NoopSlack:
+    def api_call(self, *args, **kwargs):
+        logger.info('slack disabled, noop api_call')
+
+
+if SLACK_API_TOKEN:
+    slack = SlackClient(SLACK_API_TOKEN)
+else:
+    slack = NoopSlack()
+
 
 CACHE_VERSION = str(os.environ.get('CACHE_VERSION', 1))
 CACHE_EXPIRE_SECONDS = int(os.environ.get('CACHE_EXPIRE_SECONDS', 3600 * 24))
-REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
+REDIS_HOST = os.environ.get('REDIS_HOST')
+# REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
 REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
-redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
+
+
+class NoopRedis:
+    def get(self, *args, **kwargs):
+        logger.info('redis disabled, noop get')
+
+    def set(self, *args, **kwargs):
+        logger.info('redis disabled, noop set')
+
+
+if REDIS_HOST:
+    redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
+else:
+    redis = NoopRedis()
+
 
 REDDIT_CLIENT_ID = os.environ.get('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
@@ -57,10 +84,10 @@ REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD')
 
 class NoopSubreddit:
     def submit(self, *args, **kwargs):
-        logger.info('no-op submit, reddit is disabled')
+        logger.info('reddit disabled, noop submit')
 
 
-if REDDIT_USERNAME and REDDIT_PASSWORD:
+if REDDIT_USERNAME:
     reddit = Reddit(
         client_id=REDDIT_CLIENT_ID,
         client_secret=REDDIT_CLIENT_SECRET,
@@ -72,20 +99,17 @@ if REDDIT_USERNAME and REDDIT_PASSWORD:
 else:
     subreddit = NoopSubreddit()
 
-MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
-MLB_SEARCH_TEMPLATE = 'https://search-api.mlb.com/svc/search/v2/mlb_global_sitesearch_en/query?q={play_uuid}'
-MLB_CONTENT_TEMPLATE = 'https://content.mlb.com/mlb/item/id/v1/{asset_id}/details/web-v1.json'
 
+MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
+CAPTIVATING_INDEX_THRESHOLD = int(os.environ.get('CAPTIVATING_INDEX_THRESHOLD', 70))
+PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
+UNIQUE_HIT_COUNT_THRESHOLD = int(os.environ.get('UNIQUE_HIT_COUNT_THRESHOLD', 3))
 HITS = {
     'single': '1B',
     'double': '2B',
     'triple': '3B',
     'home run': 'HR',
 }
-
-CAPTIVATING_INDEX_THRESHOLD = int(os.environ.get('CAPTIVATING_INDEX_THRESHOLD', 70))
-PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
-UNIQUE_HIT_COUNT_THRESHOLD = int(os.environ.get('UNIQUE_HIT_COUNT_THRESHOLD', 2))
 
 
 def get_formatted_dates():
@@ -133,7 +157,8 @@ def submit_link(title, url):
         logger.exception('submit to reddit failed')
 
 
-def handle_captivating(play):
+# TODO: post all HRs regardless of captivating index
+def handle_captivating(play, game_key):
     captivating_index = play['about'].get('captivatingIndex', 0)
     if captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
         play_uuid = play['playEvents'][-1]['playId']
@@ -145,27 +170,36 @@ def handle_captivating(play):
             logger.info(f'skipping play {play_uuid} with captivating index of {captivating_index}, in cache')
             return
 
-        response = requests.get(MLB_SEARCH_TEMPLATE.format(play_uuid=play_uuid))
+        response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/game/{game_key}/content')
         data = response.json()
-        try:
-            asset_id = data['docs'][0]['asset_id']
-        except:
-            logger.info(
-                f'skipping play {play_uuid} with captivating index of {captivating_index}, highlight unavailable'
-            )
-            return
 
-        response = requests.get(MLB_CONTENT_TEMPLATE.format(asset_id=asset_id))
-        data = response.json()
-        for playback in data['playbacks']:
-            playback_url = playback['url']
-            if PLAYBACK_RESOLUTION in playback_url:
-                logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
-                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
+        highlights = data['highlights']['live']['items']
+        for highlight in highlights:
+            is_video = highlight['type'] == 'video'
 
-                description = data['description']
-                post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
-                submit_link(description, playback_url)
+            highlight_uuid = None
+            for keyword in highlight['keywordsAll']:
+                if keyword['type'] == 'sv_id':
+                    highlight_uuid = keyword['value']
+                    break
+
+            if is_video and highlight_uuid == play_uuid:
+                for playback in highlight['playbacks']:
+                    playback_url = playback['url']
+                    if PLAYBACK_RESOLUTION in playback_url:
+                        logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
+                        redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
+
+                        # TODO: can also try highlight['title']
+                        description = highlight['description']
+                        post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
+                        submit_link(description, playback_url)
+
+                        return
+
+        logger.info(
+            f'skipping play {play_uuid} with captivating index of {captivating_index}, highlight unavailable'
+        )
 
 
 def cyclewatch():
@@ -191,6 +225,7 @@ def cyclewatch():
             # valid states: 'preview', 'live', 'final'
             state = game['status']['abstractGameState'].lower()
             if state != 'live':
+                # TODO: log skipped game start time if preview
                 logger.info(f'skipping game {game_key}, state is {state}')
                 continue
 
@@ -217,7 +252,7 @@ def cyclewatch():
         # plays come sorted in chronological order
         plays = data['liveData']['plays']['allPlays']
         for play in plays:
-            handle_captivating(play)
+            handle_captivating(play, game_key)
 
             event = play['result'].get('event', '').lower()
             hit_code = HITS.get(event)
@@ -251,6 +286,8 @@ def cyclewatch():
 
                 hits = player['hits']
                 at_bats = player['at_bats']
+                # TODO: only post cycle alert if before 9th inning and player already has a 3B
+                # TODO: include data about how likely player is to get missing hit (count of missing hit / plate apps)
                 post_message(
                     f'CYCLE ALERT: {name} {hits}-{at_bats} with {joined_hits} in the {inning_ordinal} inning'
                 )
