@@ -201,17 +201,18 @@ def cyclewatch():
                 }
 
         now = datetime.now()
-        timestamp = int(now.timestamp())
+        now_timestamp = int(now.timestamp())
 
         highlights = {}
         for highlight in content['highlights']['live']['items']:
             highlights[int(highlight['id'])] = highlight
 
-        pairs = [(timestamp, highlight_id) for highlight_id in highlights]
-
+        pairs = [(now_timestamp, highlight_id) for highlight_id in highlights]
         content_key = make_key(game_key, 'content')
-        redis.zadd(content_key, pairs, nx=True)
-        redis.expire(content_key, REDIS_EXPIRE_SECONDS)
+
+        if highlights:
+            redis.zadd(content_key, pairs, nx=True)
+            redis.expire(content_key, REDIS_EXPIRE_SECONDS)
 
         # plays are ordered least to most recent
         plays = feed['liveData']['plays']['allPlays']
@@ -232,9 +233,9 @@ def cyclewatch():
                     batter_name = batter['name']
 
                     play_end = parser.parse(play['about']['endTime'])
-                    elapsed = now - play_end
-                    elapsed_seconds = int(elapsed.total_seconds())
-                    is_stale = elapsed_seconds > STALE_PLAY_SECONDS
+                    play_end_timestamp = int(play_end.timestamp())
+                    seconds = now_timestamp - play_end_timestamp
+                    is_stale = seconds > STALE_PLAY_SECONDS
 
                     play_key = make_key(play_uuid)
                     is_cached = bool(redis.get(play_key))
@@ -243,7 +244,7 @@ def cyclewatch():
                         logger.info(
                             'ignoring stale play '
                             f'{play_uuid} {batter_name} {hit_code} {captivating_index}, '
-                            f'{elapsed_seconds} elapsed'
+                            f'{seconds} seconds elapsed'
                         )
                     elif is_cached:
                         logger.info(
@@ -253,7 +254,8 @@ def cyclewatch():
                     else:
                         logger.info(
                             'seeking highlight for play '
-                            f'{play_uuid} {batter_name} {hit_code} {captivating_index}'
+                            f'{play_uuid} {batter_name} {hit_code} {captivating_index}, '
+                            f'{seconds} seconds elapsed'
                         )
 
                         min_score = int(play_end.timestamp())
