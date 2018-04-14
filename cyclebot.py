@@ -173,6 +173,8 @@ def share_highlight(content, play, batter_name, hit_code, captivating_index):
         for keyword in highlight['keywordsAll']:
             # TODO: figure out how to locate highlight when sv_id is not present.
             # remember highlights are sorted most to least recent, opposite of play order.
+            # for example, see https://statsapi.mlb.com/api/v1/game/529605/content, look
+            # for Haniger, see sv_id is missing.
             if keyword['type'] == 'sv_id':
                 highlight_uuid = keyword['value']
                 break
