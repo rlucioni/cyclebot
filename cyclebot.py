@@ -220,7 +220,6 @@ def cyclewatch():
             # valid states: 'preview', 'live', 'final'
             state = game['status']['abstractGameState'].lower()
             if state != 'live':
-                # TODO: log skipped game start time if preview
                 logger.info(f'skipping game {game_key}, state is {state}')
                 continue
 
