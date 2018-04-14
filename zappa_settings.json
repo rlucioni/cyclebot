@@ -3,7 +3,7 @@
         "apigateway_enabled": false,
         "aws_region": "us-east-1",
         "events": [{
-            "function": "cyclebot.cyclewatch",
+            "function": "cyclebot.poll",
             // https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
             "expression": "rate(1 minute)"
         }],
