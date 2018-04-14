@@ -158,50 +158,43 @@ def submit_link(title, url):
         logger.exception('submit to reddit failed')
 
 
-# TODO: post all HRs regardless of captivating index
 # TODO: make sure play isn't stale before posting (>5 min old?)
-def handle_captivating(play, game_key):
-    captivating_index = play['about'].get('captivatingIndex', 0)
-    if captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
-        play_uuid = play['playEvents'][-1]['playId']
+def share_highlight(play, game_key):
+    play_uuid = play['playEvents'][-1]['playId']
 
-        cache_key = make_key(play_uuid)
-        is_cached = bool(redis.get(cache_key))
+    cache_key = make_key(play_uuid)
+    is_cached = bool(redis.get(cache_key))
 
-        if is_cached:
-            logger.info(f'skipping play {play_uuid} with captivating index of {captivating_index}, in cache')
-            return
+    if is_cached:
+        logger.info(f'skipping play {play_uuid}, in cache')
+        return
 
-        response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/game/{game_key}/content')
-        data = response.json()
+    response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/game/{game_key}/content')
+    data = response.json()
 
-        highlights = data['highlights']['live']['items']
-        for highlight in highlights:
-            is_video = highlight['type'] == 'video'
+    highlights = data['highlights']['live']['items']
+    for highlight in highlights:
+        highlight_uuid = None
+        for keyword in highlight['keywordsAll']:
+            if keyword['type'] == 'sv_id':
+                highlight_uuid = keyword['value']
+                break
 
-            highlight_uuid = None
-            for keyword in highlight['keywordsAll']:
-                if keyword['type'] == 'sv_id':
-                    highlight_uuid = keyword['value']
-                    break
+        if highlight_uuid == play_uuid:
+            for playback in highlight['playbacks']:
+                playback_url = playback['url']
+                if PLAYBACK_RESOLUTION in playback_url:
+                    logger.info(f'sharing highlight for play {play_uuid}')
+                    redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
-            if is_video and highlight_uuid == play_uuid:
-                for playback in highlight['playbacks']:
-                    playback_url = playback['url']
-                    if PLAYBACK_RESOLUTION in playback_url:
-                        logger.info(f'sharing highlight for play {play_uuid} with captivating index of {captivating_index}')
-                        redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
+                    # TODO: can also try highlight['title']
+                    description = highlight['description']
+                    post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
+                    submit_link(description, playback_url)
 
-                        # TODO: can also try highlight['title']
-                        description = highlight['description']
-                        post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
-                        submit_link(description, playback_url)
+                    return
 
-                        return
-
-        logger.info(
-            f'highlight unavailable for play {play_uuid} with captivating index of {captivating_index}'
-        )
+    logger.info(f'highlight unavailable for play {play_uuid}')
 
 
 def cyclewatch():
@@ -254,8 +247,6 @@ def cyclewatch():
         # plays are ordered least to most recent (append-only log)
         plays = data['liveData']['plays']['allPlays']
         for play in plays:
-            handle_captivating(play, game_key)
-
             event = play['result'].get('event', '').lower()
             hit_code = HITS.get(event)
 
@@ -265,6 +256,10 @@ def cyclewatch():
 
                 if hit_code not in batter['unique_hits']:
                     batter['unique_hits'].append(hit_code)
+
+                captivating_index = play['about'].get('captivatingIndex', 0)
+                if hit_code == 'HR' or captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
+                    share_highlight(play, game_key)
 
         inning_ordinal = data['liveData']['linescore'].get('currentInningOrdinal')
         for player_id, player in players.items():
