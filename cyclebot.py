@@ -387,14 +387,14 @@ def clean():
     to_delete = versions[KEEP_COUNT:]
 
     logger.info(
-        f'found {len(versions)} {FUNCTION_NAME} versions, {len(to_delete)} to delete: {versions}'
+        f'found {FUNCTION_NAME} versions {versions}, will delete {to_delete}'
     )
 
     for version in to_delete:
         logger.info(f'deleting version {version}')
         client.delete_function(
             FunctionName=FUNCTION_NAME,
-            Qualifier=version,
+            Qualifier=str(version),
         )
 
 
