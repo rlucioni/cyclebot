@@ -1,3 +1,6 @@
+clean:
+	python clean.py
+
 cyclebot:
 	python cyclebot.py
 
