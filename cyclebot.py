@@ -157,7 +157,7 @@ def submit_link(title, url):
 
 
 # TODO: make sure play isn't stale before posting (>5 min old?)
-def share_highlight(play, batter_name, hit_code, captivating_index, game_key):
+def share_highlight(content, play, batter_name, hit_code, captivating_index):
     play_uuid = play['playEvents'][-1]['playId']
 
     cache_key = make_key(play_uuid)
@@ -167,10 +167,7 @@ def share_highlight(play, batter_name, hit_code, captivating_index, game_key):
         logger.info(f'skipping play {play_uuid} {batter_name} {hit_code} {captivating_index}, in cache')
         return
 
-    response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/game/{game_key}/content')
-    data = response.json()
-
-    highlights = data['highlights']['live']['items']
+    highlights = content['highlights']['live']['items']
     for highlight in highlights:
         highlight_uuid = None
         for keyword in highlight['keywordsAll']:
@@ -207,12 +204,12 @@ def cyclewatch():
         logger.info(f'getting game keys for {formatted_date}')
 
         response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/schedule?sportId=1&date={formatted_date}')
-        data = response.json()
+        schedule = response.json()
 
         # Returned dates list can be empty. It can also contain multiple dates,
         # so we filter to make sure we get the date we want.
         games = []
-        for day in data['dates']:
+        for day in schedule['dates']:
             if day['date'] == formatted_date:
                 games = day['games']
 
@@ -229,13 +226,16 @@ def cyclewatch():
             game_keys.add(game_key)
 
     for game_key in game_keys:
-        logger.info(f'getting game data for game {game_key}')
+        logger.info(f'getting feed and content for game {game_key}')
 
         response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1.1/game/{game_key}/feed/live')
-        data = response.json()
+        feed = response.json()
+
+        response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/game/{game_key}/content')
+        content = response.json()
 
         players = {}
-        for team in data['liveData']['boxscore']['teams'].values():
+        for team in feed['liveData']['boxscore']['teams'].values():
             for player in team['players'].values():
                 player_id = player['person']['id']
                 players[player_id] = {
@@ -246,7 +246,7 @@ def cyclewatch():
                 }
 
         # plays are ordered least to most recent (append-only log)
-        plays = data['liveData']['plays']['allPlays']
+        plays = feed['liveData']['plays']['allPlays']
         for play in plays:
             event = play['result'].get('event', '').lower()
             hit_code = HITS.get(event)
@@ -260,9 +260,9 @@ def cyclewatch():
 
                 captivating_index = play['about'].get('captivatingIndex', 0)
                 if hit_code == 'HR' or captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
-                    share_highlight(play, batter['name'], hit_code, captivating_index, game_key)
+                    share_highlight(content, play, batter['name'], hit_code, captivating_index)
 
-        inning_ordinal = data['liveData']['linescore'].get('currentInningOrdinal')
+        inning_ordinal = feed['liveData']['linescore'].get('currentInningOrdinal')
         for player_id, player in players.items():
             unique_hits = player['unique_hits']
             unique_hit_count = len(unique_hits)
