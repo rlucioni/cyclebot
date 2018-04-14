@@ -251,8 +251,16 @@ def cyclewatch():
                             f'{play_uuid} {batter_name} {hit_code} {captivating_index}'
                         )
                     else:
+                        logger.info(
+                            'seeking highlight for play '
+                            f'{play_uuid} {batter_name} {hit_code} {captivating_index}'
+                        )
+
                         min_score = int(play_end.timestamp())
                         highlight_ids = redis.zrangebyscore(content_key, min_score, '+inf')
+
+                        logger.info(f'{len(highlight_ids)} highlights since play {play_uuid}')
+
                         highlights_by_sv_id = {}
                         highlights_by_player_id = {}
 
