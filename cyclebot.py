@@ -42,6 +42,7 @@ logger = logging.getLogger(__name__)
 SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
 
 
+# TODO: put these noops in their own module
 class NoopSlack:
     def api_call(self, *args, **kwargs):
         logger.info('slack disabled, noop api_call')
@@ -101,7 +102,7 @@ else:
 
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
-CAPTIVATING_INDEX_THRESHOLD = int(os.environ.get('CAPTIVATING_INDEX_THRESHOLD', 70))
+CAPTIVATING_INDEX_THRESHOLD = int(os.environ.get('CAPTIVATING_INDEX_THRESHOLD', 75))
 PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
 UNIQUE_HIT_COUNT_THRESHOLD = int(os.environ.get('UNIQUE_HIT_COUNT_THRESHOLD', 3))
 HITS = {
@@ -158,6 +159,7 @@ def submit_link(title, url):
 
 
 # TODO: post all HRs regardless of captivating index
+# TODO: make sure play isn't stale before posting (>5 min old?)
 def handle_captivating(play, game_key):
     captivating_index = play['about'].get('captivatingIndex', 0)
     if captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
@@ -187,7 +189,7 @@ def handle_captivating(play, game_key):
                 for playback in highlight['playbacks']:
                     playback_url = playback['url']
                     if PLAYBACK_RESOLUTION in playback_url:
-                        logger.info(f'notifying about play {play_uuid} with captivating index of {captivating_index}')
+                        logger.info(f'sharing highlight for play {play_uuid} with captivating index of {captivating_index}')
                         redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
                         # TODO: can also try highlight['title']
@@ -198,7 +200,7 @@ def handle_captivating(play, game_key):
                         return
 
         logger.info(
-            f'skipping play {play_uuid} with captivating index of {captivating_index}, highlight unavailable'
+            f'highlight unavailable for play {play_uuid} with captivating index of {captivating_index}'
         )
 
 
@@ -249,7 +251,7 @@ def cyclewatch():
                     'unique_hits': [],
                 }
 
-        # plays come sorted in chronological order
+        # plays are ordered least to most recent (append-only log)
         plays = data['liveData']['plays']['allPlays']
         for play in plays:
             handle_captivating(play, game_key)
