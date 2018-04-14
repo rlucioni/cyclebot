@@ -157,14 +157,14 @@ def submit_link(title, url):
 
 
 # TODO: make sure play isn't stale before posting (>5 min old?)
-def share_highlight(play, game_key):
+def share_highlight(play, batter_name, hit_code, captivating_index, game_key):
     play_uuid = play['playEvents'][-1]['playId']
 
     cache_key = make_key(play_uuid)
     is_cached = bool(redis.get(cache_key))
 
     if is_cached:
-        logger.info(f'skipping play {play_uuid}, in cache')
+        logger.info(f'skipping play {play_uuid} {batter_name} {hit_code} {captivating_index}, in cache')
         return
 
     response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/game/{game_key}/content')
@@ -182,7 +182,9 @@ def share_highlight(play, game_key):
             for playback in highlight['playbacks']:
                 playback_url = playback['url']
                 if PLAYBACK_RESOLUTION in playback_url:
-                    logger.info(f'sharing highlight for play {play_uuid}')
+                    logger.info(
+                        f'sharing highlight for play {play_uuid} {batter_name} {hit_code} {captivating_index}'
+                    )
                     redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
 
                     # TODO: can also try highlight['title']
@@ -192,7 +194,7 @@ def share_highlight(play, game_key):
 
                     return
 
-    logger.info(f'highlight unavailable for play {play_uuid}')
+    logger.info(f'highlight unavailable for play {play_uuid} {batter_name} {hit_code} {captivating_index}')
 
 
 def cyclewatch():
@@ -256,7 +258,7 @@ def cyclewatch():
 
                 captivating_index = play['about'].get('captivatingIndex', 0)
                 if hit_code == 'HR' or captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
-                    share_highlight(play, game_key)
+                    share_highlight(play, batter['name'], hit_code, captivating_index, game_key)
 
         inning_ordinal = data['liveData']['linescore'].get('currentInningOrdinal')
         for player_id, player in players.items():
