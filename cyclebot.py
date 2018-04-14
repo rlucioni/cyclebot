@@ -5,9 +5,9 @@ from hashlib import md5
 from logging.config import dictConfig
 
 import requests
+from dateutil import parser
 from praw import Reddit
-from pytz import timezone
-from redis import StrictRedis
+from redis import StrictRedis, RedisError
 from slackclient import SlackClient
 
 
@@ -39,41 +39,60 @@ dictConfig({
 logger = logging.getLogger(__name__)
 
 
+REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
+REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+REDIS_KEY_VERSION = str(os.environ.get('REDIS_KEY_VERSION', 1))
+REDIS_EXPIRE_SECONDS = int(os.environ.get('REDIS_EXPIRE_SECONDS', 3600 * 24))
+
+
+# monkey patch to add support for nx/xx options
+# https://github.com/andymccurdy/redis-py/issues/649
+def zadd(self, name, items, nx=False, xx=False):
+    if nx and xx:
+        raise RedisError("ZADD can't use both NX and XX modes")
+
+    pieces = []
+
+    if nx:
+        pieces.append('NX')
+    if xx:
+        pieces.append('XX')
+
+    for pair in items:
+        if len(pair) != 2:
+            raise RedisError('ZADD items must be pairs')
+
+        # score
+        pieces.append(pair[0])
+        # member
+        pieces.append(pair[1])
+
+    return self.execute_command('ZADD', name, *pieces)
+
+
+StrictRedis.zadd = zadd
+redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
+
+
+class Noop:
+    def __init__(self, name):
+        self.name = name
+
+    def __getattr__(self, method):
+        logger.info(f'{self.name} disabled, noop {method}')
+        return self.noop
+
+    def noop(self, *args, **kwargs):
+        pass
+
+
 SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
-
-
-# TODO: put these noops in their own module
-class NoopSlack:
-    def api_call(self, *args, **kwargs):
-        logger.info('slack disabled, noop api_call')
-
 
 if SLACK_API_TOKEN:
     slack = SlackClient(SLACK_API_TOKEN)
 else:
-    slack = NoopSlack()
-
-
-CACHE_VERSION = str(os.environ.get('CACHE_VERSION', 1))
-CACHE_EXPIRE_SECONDS = int(os.environ.get('CACHE_EXPIRE_SECONDS', 3600 * 24))
-REDIS_HOST = os.environ.get('REDIS_HOST')
-# REDIS_HOST = os.environ.get('REDIS_HOST', '0.0.0.0')
-REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
-REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
-
-
-class NoopRedis:
-    def get(self, *args, **kwargs):
-        logger.info('redis disabled, noop get')
-
-    def set(self, *args, **kwargs):
-        logger.info('redis disabled, noop set')
-
-
-if REDIS_HOST:
-    redis = StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASSWORD)
-else:
-    redis = NoopRedis()
+    slack = Noop('slack')
 
 
 REDDIT_CLIENT_ID = os.environ.get('REDDIT_CLIENT_ID')
@@ -81,12 +100,6 @@ REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
 REDDIT_USERAGENT = os.environ.get('REDDIT_USERAGENT')
 REDDIT_USERNAME = os.environ.get('REDDIT_USERNAME')
 REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD')
-
-
-class NoopSubreddit:
-    def submit(self, *args, **kwargs):
-        logger.info('reddit disabled, noop submit')
-
 
 if REDDIT_USERNAME:
     reddit = Reddit(
@@ -98,11 +111,12 @@ if REDDIT_USERNAME:
     )
     subreddit = reddit.subreddit('baseball')
 else:
-    subreddit = NoopSubreddit()
+    subreddit = Noop('reddit')
 
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
 CAPTIVATING_INDEX_THRESHOLD = int(os.environ.get('CAPTIVATING_INDEX_THRESHOLD', 75))
+STALE_PLAY_SECONDS = int(os.environ.get('STALE_PLAY_SECONDS', 300))
 PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
 UNIQUE_HIT_COUNT_THRESHOLD = int(os.environ.get('UNIQUE_HIT_COUNT_THRESHOLD', 3))
 HITS = {
@@ -113,26 +127,9 @@ HITS = {
 }
 
 
-def get_formatted_dates():
-    now = datetime.now(tz=timezone('America/New_York'))
-    timestamp = now.timestamp()
-    today = date.fromtimestamp(timestamp)
-
-    # Handle cases where games run late by looking at yesterday's games as well
-    # as today's games. The MLB API looks like it could handle this case by
-    # returning game data for multiple dates, but can't be sure.
-    yesterday = today - timedelta(days=1)
-
-    return [yesterday.isoformat(), today.isoformat()]
-
-
-def hash(text):
-    return md5(text.encode('utf-8')).hexdigest()
-
-
 def make_key(*args):
-    key = '-'.join([CACHE_VERSION] + [str(arg) for arg in args])
-    return hash(key)
+    key = '-'.join([REDIS_KEY_VERSION] + [str(arg) for arg in args])
+    return md5(key.encode('utf-8')).hexdigest()
 
 
 def post_message(message, channel='#sandbox'):
@@ -144,75 +141,31 @@ def post_message(message, channel='#sandbox'):
 
 
 def submit_link(title, url):
-    try:
-        # https://praw.readthedocs.io/en/latest/code_overview/models/subreddit.html#praw.models.Subreddit.submit
-        subreddit.submit(
-            title,
-            url=url,
-            resubmit=False,
-            send_replies=False,
-        )
-    except:
-        logger.exception('submit to reddit failed')
-
-
-# TODO: make sure play isn't stale before posting (>5 min old?)
-def share_highlight(content, play, batter_name, hit_code, captivating_index):
-    play_uuid = play['playEvents'][-1]['playId']
-
-    cache_key = make_key(play_uuid)
-    is_cached = bool(redis.get(cache_key))
-
-    if is_cached:
-        logger.info(f'skipping play {play_uuid} {batter_name} {hit_code} {captivating_index}, in cache')
-        return
-
-    highlights = content['highlights']['live']['items']
-    for highlight in highlights:
-        highlight_uuid = None
-        for keyword in highlight['keywordsAll']:
-            # TODO: figure out how to locate highlight when sv_id is not present.
-            # remember highlights are sorted most to least recent, opposite of play order.
-            # for example, see https://statsapi.mlb.com/api/v1/game/529605/content, look
-            # for Haniger, see sv_id is missing.
-            if keyword['type'] == 'sv_id':
-                highlight_uuid = keyword['value']
-                break
-
-        if highlight_uuid == play_uuid:
-            for playback in highlight['playbacks']:
-                playback_url = playback['url']
-                if PLAYBACK_RESOLUTION in playback_url:
-                    logger.info(
-                        f'sharing highlight for play {play_uuid} {batter_name} {hit_code} {captivating_index}'
-                    )
-                    redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
-
-                    # TODO: can also try highlight['title']
-                    description = highlight['description']
-                    post_message(f'HIGHLIGHT: <{playback_url}|{description}>')
-                    submit_link(description, playback_url)
-
-                    return
-
-    logger.info(f'highlight unavailable for play {play_uuid} {batter_name} {hit_code} {captivating_index}')
+    # https://praw.readthedocs.io/en/latest/code_overview/models/subreddit.html#praw.models.Subreddit.submit
+    subreddit.submit(
+        title,
+        url=url,
+        resubmit=False,
+        send_replies=False,
+    )
 
 
 def cyclewatch():
-    formatted_dates = get_formatted_dates()
     game_keys = set()
+    today = date.today()
+    yesterday = today - timedelta(days=1)
 
-    for formatted_date in formatted_dates:
-        logger.info(f'getting game keys for {formatted_date}')
+    for isoformatted in [yesterday.isoformat(), today.isoformat()]:
+        logger.info(f'getting game keys for {isoformatted}')
 
-        response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/schedule?sportId=1&date={formatted_date}')
+        response = requests.get(f'{MLB_STATS_ORIGIN}/api/v1/schedule?sportId=1&date={isoformatted}')
         schedule = response.json()
 
         # Returned dates list can be empty. It can also contain multiple dates,
         # so we filter to make sure we get the date we want.
         games = []
         for day in schedule['dates']:
-            if day['date'] == formatted_date:
+            if day['date'] == isoformatted:
                 games = day['games']
 
         for game in games:
@@ -239,7 +192,7 @@ def cyclewatch():
         players = {}
         for team in feed['liveData']['boxscore']['teams'].values():
             for player in team['players'].values():
-                player_id = player['person']['id']
+                player_id = int(player['person']['id'])
                 players[player_id] = {
                     'name': player['person']['fullName'],
                     'hits': player['stats']['batting'].get('hits', 0),
@@ -247,14 +200,27 @@ def cyclewatch():
                     'unique_hits': [],
                 }
 
-        # plays are ordered least to most recent (append-only log)
+        now = datetime.now()
+        timestamp = int(now.timestamp())
+
+        highlights = {}
+        for highlight in content['highlights']['live']['items']:
+            highlights[int(highlight['id'])] = highlight
+
+        pairs = [(timestamp, highlight_id) for highlight_id in highlights]
+
+        content_key = make_key(game_key, 'content')
+        redis.zadd(content_key, pairs, nx=True)
+        redis.expire(content_key, REDIS_EXPIRE_SECONDS)
+
+        # plays are ordered least to most recent
         plays = feed['liveData']['plays']['allPlays']
         for play in plays:
             event = play['result'].get('event', '').lower()
             hit_code = HITS.get(event)
 
             if hit_code:
-                batter_id = play['matchup']['batter']['id']
+                batter_id = int(play['matchup']['batter']['id'])
                 batter = players[batter_id]
 
                 if hit_code not in batter['unique_hits']:
@@ -262,7 +228,64 @@ def cyclewatch():
 
                 captivating_index = play['about'].get('captivatingIndex', 0)
                 if hit_code == 'HR' or captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
-                    share_highlight(content, play, batter['name'], hit_code, captivating_index)
+                    play_uuid = play['playEvents'][-1]['playId']
+                    batter_name = batter['name']
+
+                    play_end = parser.parse(play['about']['endTime'])
+                    elapsed = now - play_end
+                    elapsed_seconds = int(elapsed.total_seconds())
+                    is_stale = elapsed_seconds > STALE_PLAY_SECONDS
+
+                    play_key = make_key(play_uuid)
+                    is_cached = bool(redis.get(play_key))
+
+                    if is_stale:
+                        logger.info(
+                            'ignoring stale play '
+                            f'{play_uuid} {batter_name} {hit_code} {captivating_index}, '
+                            f'{elapsed_seconds} elapsed'
+                        )
+                    elif is_cached:
+                        logger.info(
+                            'ignoring cached play '
+                            f'{play_uuid} {batter_name} {hit_code} {captivating_index}'
+                        )
+                    else:
+                        min_score = int(play_end.timestamp())
+                        highlight_ids = redis.zrangebyscore(content_key, min_score, '+inf')
+                        highlights_by_sv_id = {}
+                        highlights_by_player_id = {}
+
+                        for highlight_id in highlight_ids:
+                            highlight = highlights[int(highlight_id)]
+
+                            for keyword in highlight['keywordsAll']:
+                                if keyword['type'] == 'sv_id':
+                                    highlights_by_sv_id[keyword['value']] = highlight
+
+                                if keyword['type'] == 'player_id':
+                                    highlights_by_player_id[int(keyword['value'])] = highlight
+
+                        highlight = highlights_by_sv_id.get(play_uuid) or highlights_by_player_id.get(batter_id)
+                        if highlight:
+                            logger.info(
+                                'sharing highlight for play '
+                                f'{play_uuid} {batter_name} {hit_code} {captivating_index}'
+                            )
+
+                            redis.set(play_key, 1, ex=REDIS_EXPIRE_SECONDS)
+
+                            playback = [p for p in highlight['playbacks'] if PLAYBACK_RESOLUTION in p['url']][0]
+                            playback_url = playback['url']
+
+                            description = highlight['description']
+                            post_message(f'{play_uuid}: <{playback_url}|{description}>')
+                            submit_link(description, playback_url)
+                        else:
+                            logger.info(
+                                'highlight unavailable for play '
+                                f'{play_uuid} {batter_name} {hit_code} {captivating_index}'
+                            )
 
         inning_ordinal = feed['liveData']['linescore'].get('currentInningOrdinal')
         for player_id, player in players.items():
@@ -282,7 +305,7 @@ def cyclewatch():
                     continue
 
                 logger.info(f'notifying about {name} with {joined_hits}')
-                redis.set(cache_key, 1, ex=CACHE_EXPIRE_SECONDS)
+                redis.set(cache_key, 1, ex=REDIS_EXPIRE_SECONDS)
 
                 hits = player['hits']
                 at_bats = player['at_bats']
