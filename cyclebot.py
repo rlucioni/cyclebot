@@ -167,14 +167,24 @@ class Cyclebot:
             for game in games:
                 game_key = game['gamePk']
 
+                home = game['teams']['home']['team']['name']
+                away = game['teams']['away']['team']['name']
                 # valid states: 'preview', 'live', 'final'
                 state = game['status']['abstractGameState'].lower()
-                if state != 'live':
-                    logger.info(f'ignoring game {game_key}, state is {state}')
-                    continue
+                detailed_state = game['status'].get('detailedState', '').lower()
+                optional = ''
 
-                # TODO: ignore seriesDescription == 'Spring Training'
-                self.game_keys.add(game_key)
+                if state == 'preview':
+                    start = parser.parse(game['gameDate']).strftime('%H:%M')
+                    optional = f' ({start}, {detailed_state})'
+                else:
+                    optional = f' ({detailed_state})'
+
+                logger.info(f'{game_key}: {away} @ {home}, {state}{optional}')
+
+                if state == 'live':
+                    # TODO: ignore seriesDescription == 'Spring Training'
+                    self.game_keys.add(game_key)
 
     def process_game(self, game_key):
         logger.info(f'processing game {game_key}')
@@ -389,7 +399,7 @@ def clean():
 
 
 if __name__ == '__main__':
-    if sys.argv[1] == 'clean':
+    if sys.argv[-1] == 'clean':
         clean()
     else:
         poll()
