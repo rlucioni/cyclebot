@@ -174,6 +174,8 @@ def share_highlight(play, batter_name, hit_code, captivating_index, game_key):
     for highlight in highlights:
         highlight_uuid = None
         for keyword in highlight['keywordsAll']:
+            # TODO: figure out how to locate highlight when sv_id is not present.
+            # remember highlights are sorted most to least recent, opposite of play order.
             if keyword['type'] == 'sv_id':
                 highlight_uuid = keyword['value']
                 break
