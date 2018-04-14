@@ -125,8 +125,6 @@ class Cyclebot:
         else:
             self.subreddit = Noop('reddit')
 
-        self.now_timestamp = int(datetime.now().timestamp())
-
         self.game_keys = set()
 
         self.feed = None
@@ -217,7 +215,7 @@ class Cyclebot:
         for highlight in self.content['highlights']['live']['items']:
             self.highlights[int(highlight['id'])] = highlight
 
-        pairs = [(self.now_timestamp, highlight_id) for highlight_id in self.highlights]
+        pairs = [(self.now(), highlight_id) for highlight_id in self.highlights]
         self.content_key = self.make_key(game_key, 'content')
 
         if pairs:
@@ -244,9 +242,8 @@ class Cyclebot:
         batter_name = batter['name']
         batter_id = batter['id']
 
-        play_end = parser.parse(play['about']['endTime'])
-        play_end_timestamp = int(play_end.timestamp())
-        seconds_elapsed = self.now_timestamp - play_end_timestamp
+        play_end = int(parser.parse(play['about']['endTime']).timestamp())
+        seconds_elapsed = self.now() - play_end
         is_stale = seconds_elapsed > STALE_PLAY_SECONDS
 
         play_key = self.make_key(play_uuid)
@@ -270,8 +267,7 @@ class Cyclebot:
                 f'{seconds_elapsed} seconds elapsed'
             )
 
-            min_score = int(play_end.timestamp())
-            highlight_ids = self.redis.zrangebyscore(self.content_key, min_score, '+inf')
+            highlight_ids = self.redis.zrangebyscore(self.content_key, play_end, '+inf')
 
             logger.info(f'{len(highlight_ids)} highlights since play {play_uuid}')
 
@@ -333,6 +329,9 @@ class Cyclebot:
             self.post_slack_message(
                 f'CYCLE ALERT: {name} {hits}-{at_bats} with {joined_hits} in the {self.inning_ordinal} inning'
             )
+
+    def now(self):
+        return int(datetime.now().timestamp())
 
     def make_key(self, *args):
         key = '-'.join([REDIS_KEY_VERSION] + [str(arg) for arg in args])
