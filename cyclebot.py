@@ -146,8 +146,6 @@ def post_message(message, channel='#sandbox'):
 def submit_link(title, url):
     try:
         # https://praw.readthedocs.io/en/latest/code_overview/models/subreddit.html#praw.models.Subreddit.submit
-        # TODO: send shortlink to slack?
-        # https://praw.readthedocs.io/en/latest/code_overview/models/submission.html#praw.models.Submission.shortlink
         subreddit.submit(
             title,
             url=url,
