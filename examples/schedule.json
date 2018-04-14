@@ -1,21 +1,21 @@
 {
   "copyright" : "Copyright 2018 MLB Advanced Media, L.P.  Use of any content on this page acknowledges agreement to the terms posted here http://gdx.mlb.com/components/copyright.txt",
-  "totalItems" : 13,
+  "totalItems" : 15,
   "totalEvents" : 0,
-  "totalGames" : 13,
-  "totalGamesInProgress" : 3,
+  "totalGames" : 15,
+  "totalGamesInProgress" : 10,
   "dates" : [ {
-    "date" : "2018-04-04",
-    "totalItems" : 13,
+    "date" : "2018-04-13",
+    "totalItems" : 15,
     "totalEvents" : 0,
-    "totalGames" : 13,
-    "totalGamesInProgress" : 3,
+    "totalGames" : 15,
+    "totalGamesInProgress" : 10,
     "games" : [ {
-      "gamePk" : 529496,
-      "link" : "/api/v1/game/529496/feed/live",
+      "gamePk" : 529598,
+      "link" : "/api/v1/game/529598/feed/live",
       "gameType" : "R",
       "season" : "2018",
-      "gameDate" : "2018-04-04T16:10:00Z",
+      "gameDate" : "2018-04-13T18:20:00Z",
       "status" : {
         "abstractGameState" : "Final",
         "codedGameState" : "F",
@@ -26,137 +26,669 @@
       "teams" : {
         "away" : {
           "leagueRecord" : {
-            "wins" : 4,
-            "losses" : 2,
-            "pct" : ".667"
+            "wins" : 8,
+            "losses" : 5,
+            "pct" : ".615"
           },
-          "score" : 0,
-          "team" : {
-            "id" : 120,
-            "name" : "Washington Nationals",
-            "link" : "/api/v1/teams/120"
-          },
-          "isWinner" : false,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 4,
-            "losses" : 2,
-            "pct" : ".667"
-          },
-          "score" : 0,
+          "score" : 4,
           "team" : {
             "id" : 144,
             "name" : "Atlanta Braves",
             "link" : "/api/v1/teams/144"
           },
-          "isWinner" : false,
+          "isWinner" : true,
           "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 4705,
-        "name" : "SunTrust Park",
-        "link" : "/api/v1/venues/4705"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529496/content"
-      },
-      "isTie" : true,
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529496-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "day",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 3,
-      "seriesGameNumber" : 3,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "S",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529494,
-      "link" : "/api/v1/game/529494/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-04T17:05:00Z",
-      "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "F",
-        "detailedState" : "Final",
-        "statusCode" : "F",
-        "abstractGameCode" : "F"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 1,
-            "losses" : 5,
-            "pct" : ".167"
-          },
-          "score" : 2,
-          "team" : {
-            "id" : 139,
-            "name" : "Tampa Bay Rays",
-            "link" : "/api/v1/teams/139"
-          },
-          "isWinner" : false,
-          "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
         },
         "home" : {
           "leagueRecord" : {
-            "wins" : 4,
-            "losses" : 2,
-            "pct" : ".667"
+            "wins" : 6,
+            "losses" : 7,
+            "pct" : ".462"
           },
-          "score" : 7,
+          "score" : 0,
           "team" : {
-            "id" : 147,
-            "name" : "New York Yankees",
-            "link" : "/api/v1/teams/147"
+            "id" : 112,
+            "name" : "Chicago Cubs",
+            "link" : "/api/v1/teams/112"
           },
-          "isWinner" : true,
+          "isWinner" : false,
           "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
         }
       },
       "venue" : {
-        "id" : 3313,
-        "name" : "Yankee Stadium",
-        "link" : "/api/v1/venues/3313"
+        "id" : 17,
+        "name" : "Wrigley Field",
+        "link" : "/api/v1/venues/17"
       },
       "content" : {
-        "link" : "/api/v1/game/529494/content"
+        "link" : "/api/v1/game/529598/content"
       },
       "isTie" : false,
       "doubleHeader" : "N",
       "gamedayType" : "P",
       "tiebreaker" : "N",
       "gameNumber" : 1,
-      "calendarEventID" : "14-529494-2018-04-04",
+      "calendarEventID" : "14-529598-2018-04-13",
       "seasonDisplay" : "2018",
       "dayNight" : "day",
       "scheduledInnings" : 9,
-      "gamesInSeries" : 2,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529609,
+      "link" : "/api/v1/game/529609/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-13T22:40:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 6,
+            "losses" : 7,
+            "pct" : ".462"
+          },
+          "score" : 5,
+          "team" : {
+            "id" : 138,
+            "name" : "St. Louis Cardinals",
+            "link" : "/api/v1/teams/138"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 2,
+            "losses" : 10,
+            "pct" : ".167"
+          },
+          "score" : 2,
+          "team" : {
+            "id" : 113,
+            "name" : "Cincinnati Reds",
+            "link" : "/api/v1/teams/113"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 2602,
+        "name" : "Great American Ball Park",
+        "link" : "/api/v1/venues/2602"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529609/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529609-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 4,
       "seriesGameNumber" : 2,
       "seriesDescription" : "Regular Season",
       "recordSource" : "S",
       "ifNecessary" : "N",
       "ifNecessaryDescription" : "Normal Game"
     }, {
-      "gamePk" : 529488,
-      "link" : "/api/v1/game/529488/feed/live",
+      "gamePk" : 529601,
+      "link" : "/api/v1/game/529601/feed/live",
       "gameType" : "R",
       "season" : "2018",
-      "gameDate" : "2018-04-04T17:10:00Z",
-      "rescheduleDate" : "2018-04-20T17:10:00Z",
+      "gameDate" : "2018-04-13T23:05:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 7,
+            "losses" : 7,
+            "pct" : ".500"
+          },
+          "score" : 2,
+          "team" : {
+            "id" : 115,
+            "name" : "Colorado Rockies",
+            "link" : "/api/v1/teams/115"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 6,
+            "losses" : 7,
+            "pct" : ".462"
+          },
+          "score" : 1,
+          "team" : {
+            "id" : 120,
+            "name" : "Washington Nationals",
+            "link" : "/api/v1/teams/120"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 3309,
+        "name" : "Nationals Park",
+        "link" : "/api/v1/venues/3309"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529601/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529601-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 4,
+      "seriesGameNumber" : 2,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529599,
+      "link" : "/api/v1/game/529599/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-13T23:10:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 5,
+            "losses" : 8,
+            "pct" : ".385"
+          },
+          "score" : 1,
+          "team" : {
+            "id" : 110,
+            "name" : "Baltimore Orioles",
+            "link" : "/api/v1/teams/110"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 10,
+            "losses" : 2,
+            "pct" : ".833"
+          },
+          "score" : 6,
+          "team" : {
+            "id" : 111,
+            "name" : "Boston Red Sox",
+            "link" : "/api/v1/teams/111"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 3,
+        "name" : "Fenway Park",
+        "link" : "/api/v1/venues/3"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529599/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529599-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 4,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529603,
+      "link" : "/api/v1/game/529603/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-13T23:10:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 7,
+            "losses" : 6,
+            "pct" : ".538"
+          },
+          "score" : 2,
+          "team" : {
+            "id" : 158,
+            "name" : "Milwaukee Brewers",
+            "link" : "/api/v1/teams/158"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 10,
+            "losses" : 1,
+            "pct" : ".909"
+          },
+          "score" : 6,
+          "team" : {
+            "id" : 121,
+            "name" : "New York Mets",
+            "link" : "/api/v1/teams/121"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 3289,
+        "name" : "Citi Field",
+        "link" : "/api/v1/venues/3289"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529603/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529603-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529604,
+      "link" : "/api/v1/game/529604/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-13T23:10:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 6,
+            "losses" : 7,
+            "pct" : ".462"
+          },
+          "score" : 6,
+          "team" : {
+            "id" : 147,
+            "name" : "New York Yankees",
+            "link" : "/api/v1/teams/147"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 4,
+            "losses" : 8,
+            "pct" : ".333"
+          },
+          "score" : 1,
+          "team" : {
+            "id" : 116,
+            "name" : "Detroit Tigers",
+            "link" : "/api/v1/teams/116"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 2394,
+        "name" : "Comerica Park",
+        "link" : "/api/v1/venues/2394"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529604/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529604-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529606,
+      "link" : "/api/v1/game/529606/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-13T23:10:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 6,
+            "losses" : 5,
+            "pct" : ".545"
+          },
+          "score" : 1,
+          "team" : {
+            "id" : 143,
+            "name" : "Philadelphia Phillies",
+            "link" : "/api/v1/teams/143"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 3,
+            "losses" : 9,
+            "pct" : ".250"
+          },
+          "score" : 1,
+          "team" : {
+            "id" : 139,
+            "name" : "Tampa Bay Rays",
+            "link" : "/api/v1/teams/139"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 12,
+        "name" : "Tropicana Field",
+        "link" : "/api/v1/venues/12"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529606/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529606-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529607,
+      "link" : "/api/v1/game/529607/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-13T23:10:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 9,
+            "losses" : 3,
+            "pct" : ".750"
+          },
+          "score" : 2,
+          "team" : {
+            "id" : 134,
+            "name" : "Pittsburgh Pirates",
+            "link" : "/api/v1/teams/134"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 3,
+            "losses" : 9,
+            "pct" : ".250"
+          },
+          "score" : 5,
+          "team" : {
+            "id" : 146,
+            "name" : "Miami Marlins",
+            "link" : "/api/v1/teams/146"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 4169,
+        "name" : "Marlins Park",
+        "link" : "/api/v1/venues/4169"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529607/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529607-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529611,
+      "link" : "/api/v1/game/529611/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-13T23:10:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 8,
+            "losses" : 5,
+            "pct" : ".615"
+          },
+          "score" : 4,
+          "team" : {
+            "id" : 141,
+            "name" : "Toronto Blue Jays",
+            "link" : "/api/v1/teams/141"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 8,
+            "losses" : 5,
+            "pct" : ".615"
+          },
+          "score" : 4,
+          "team" : {
+            "id" : 114,
+            "name" : "Cleveland Indians",
+            "link" : "/api/v1/teams/114"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 5,
+        "name" : "Progressive Field",
+        "link" : "/api/v1/venues/5"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529611/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529611-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529610,
+      "link" : "/api/v1/game/529610/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-14T00:10:00Z",
+      "status" : {
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
+      },
+      "teams" : {
+        "away" : {
+          "leagueRecord" : {
+            "wins" : 4,
+            "losses" : 10,
+            "pct" : ".286"
+          },
+          "score" : 0,
+          "team" : {
+            "id" : 140,
+            "name" : "Texas Rangers",
+            "link" : "/api/v1/teams/140"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 9,
+            "losses" : 4,
+            "pct" : ".692"
+          },
+          "score" : 1,
+          "team" : {
+            "id" : 117,
+            "name" : "Houston Astros",
+            "link" : "/api/v1/teams/117"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 2392,
+        "name" : "Minute Maid Park",
+        "link" : "/api/v1/venues/2392"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529610/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529610-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529600,
+      "link" : "/api/v1/game/529600/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-14T00:10:00Z",
       "status" : {
         "abstractGameState" : "Final",
         "codedGameState" : "D",
@@ -168,214 +700,156 @@
       "teams" : {
         "away" : {
           "leagueRecord" : {
-            "wins" : 1,
-            "losses" : 3,
-            "pct" : ".250"
-          },
-          "team" : {
-            "id" : 118,
-            "name" : "Kansas City Royals",
-            "link" : "/api/v1/teams/118"
-          },
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 1,
-            "losses" : 4,
-            "pct" : ".200"
-          },
-          "team" : {
-            "id" : 116,
-            "name" : "Detroit Tigers",
-            "link" : "/api/v1/teams/116"
-          },
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 2394,
-        "name" : "Comerica Park",
-        "link" : "/api/v1/venues/2394"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529488/content"
-      },
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529488-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "day",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 3,
-      "seriesGameNumber" : 3,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "H",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529491,
-      "link" : "/api/v1/game/529491/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-04T17:10:00Z",
-      "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "F",
-        "detailedState" : "Final",
-        "statusCode" : "F",
-        "abstractGameCode" : "F"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 1,
-            "losses" : 4,
-            "pct" : ".200"
-          },
-          "score" : 2,
-          "team" : {
-            "id" : 143,
-            "name" : "Philadelphia Phillies",
-            "link" : "/api/v1/teams/143"
-          },
-          "isWinner" : false,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
             "wins" : 4,
-            "losses" : 1,
-            "pct" : ".800"
+            "losses" : 8,
+            "pct" : ".333"
           },
-          "score" : 4,
           "team" : {
-            "id" : 121,
-            "name" : "New York Mets",
-            "link" : "/api/v1/teams/121"
+            "id" : 145,
+            "name" : "Chicago White Sox",
+            "link" : "/api/v1/teams/145"
           },
-          "isWinner" : true,
           "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 7,
+            "losses" : 4,
+            "pct" : ".636"
+          },
+          "team" : {
+            "id" : 142,
+            "name" : "Minnesota Twins",
+            "link" : "/api/v1/teams/142"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
         }
       },
       "venue" : {
-        "id" : 3289,
-        "name" : "Citi Field",
-        "link" : "/api/v1/venues/3289"
+        "id" : 3312,
+        "name" : "Target Field",
+        "link" : "/api/v1/venues/3312"
       },
       "content" : {
-        "link" : "/api/v1/game/529491/content"
+        "link" : "/api/v1/game/529600/content"
       },
-      "isTie" : false,
       "doubleHeader" : "N",
       "gamedayType" : "P",
       "tiebreaker" : "N",
       "gameNumber" : 1,
-      "calendarEventID" : "14-529491-2018-04-04",
+      "calendarEventID" : "14-529600-2018-04-13",
       "seasonDisplay" : "2018",
-      "dayNight" : "day",
+      "dayNight" : "night",
       "scheduledInnings" : 9,
-      "gamesInSeries" : 2,
+      "gamesInSeries" : 4,
       "seriesGameNumber" : 2,
       "seriesDescription" : "Regular Season",
       "recordSource" : "S",
       "ifNecessary" : "N",
       "ifNecessaryDescription" : "Normal Game"
     }, {
-      "gamePk" : 529484,
-      "link" : "/api/v1/game/529484/feed/live",
+      "gamePk" : 529602,
+      "link" : "/api/v1/game/529602/feed/live",
       "gameType" : "R",
       "season" : "2018",
-      "gameDate" : "2018-04-04T18:10:00Z",
+      "gameDate" : "2018-04-14T00:15:00Z",
       "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "F",
-        "detailedState" : "Final",
-        "statusCode" : "F",
-        "abstractGameCode" : "F"
+        "abstractGameState" : "Live",
+        "codedGameState" : "I",
+        "detailedState" : "In Progress",
+        "statusCode" : "I",
+        "abstractGameCode" : "L"
       },
       "teams" : {
         "away" : {
           "leagueRecord" : {
-            "wins" : 1,
-            "losses" : 5,
-            "pct" : ".167"
+            "wins" : 11,
+            "losses" : 3,
+            "pct" : ".786"
           },
           "score" : 2,
           "team" : {
-            "id" : 110,
-            "name" : "Baltimore Orioles",
-            "link" : "/api/v1/teams/110"
+            "id" : 108,
+            "name" : "Los Angeles Angels",
+            "link" : "/api/v1/teams/108"
           },
-          "isWinner" : false,
           "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
         },
         "home" : {
           "leagueRecord" : {
-            "wins" : 6,
-            "losses" : 1,
-            "pct" : ".857"
+            "wins" : 3,
+            "losses" : 8,
+            "pct" : ".273"
           },
-          "score" : 3,
+          "score" : 0,
           "team" : {
-            "id" : 117,
-            "name" : "Houston Astros",
-            "link" : "/api/v1/teams/117"
+            "id" : 118,
+            "name" : "Kansas City Royals",
+            "link" : "/api/v1/teams/118"
           },
-          "isWinner" : true,
           "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
         }
       },
       "venue" : {
-        "id" : 2392,
-        "name" : "Minute Maid Park",
-        "link" : "/api/v1/venues/2392"
+        "id" : 7,
+        "name" : "Kauffman Stadium",
+        "link" : "/api/v1/venues/7"
       },
       "content" : {
-        "link" : "/api/v1/game/529484/content"
+        "link" : "/api/v1/game/529602/content"
       },
-      "isTie" : false,
       "doubleHeader" : "N",
       "gamedayType" : "P",
       "tiebreaker" : "N",
       "gameNumber" : 1,
-      "calendarEventID" : "14-529484-2018-04-04",
+      "calendarEventID" : "14-529602-2018-04-13",
       "seasonDisplay" : "2018",
-      "dayNight" : "day",
+      "dayNight" : "night",
       "scheduledInnings" : 9,
-      "gamesInSeries" : 3,
-      "seriesGameNumber" : 3,
+      "gamesInSeries" : 4,
+      "seriesGameNumber" : 2,
       "seriesDescription" : "Regular Season",
       "recordSource" : "S",
       "ifNecessary" : "N",
       "ifNecessaryDescription" : "Normal Game"
     }, {
-      "gamePk" : 529489,
-      "link" : "/api/v1/game/529489/feed/live",
+      "gamePk" : 529597,
+      "link" : "/api/v1/game/529597/feed/live",
       "gameType" : "R",
       "season" : "2018",
-      "gameDate" : "2018-04-04T19:40:00Z",
+      "gameDate" : "2018-04-14T02:10:00Z",
       "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "F",
-        "detailedState" : "Final",
-        "statusCode" : "F",
-        "abstractGameCode" : "F"
+        "abstractGameState" : "Preview",
+        "codedGameState" : "P",
+        "detailedState" : "Pre-Game",
+        "statusCode" : "P",
+        "abstractGameCode" : "P"
       },
       "teams" : {
         "away" : {
           "leagueRecord" : {
-            "wins" : 2,
-            "losses" : 5,
-            "pct" : ".286"
+            "wins" : 9,
+            "losses" : 3,
+            "pct" : ".750"
+          },
+          "score" : 0,
+          "team" : {
+            "id" : 109,
+            "name" : "Arizona Diamondbacks",
+            "link" : "/api/v1/teams/109"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 4,
+            "losses" : 7,
+            "pct" : ".364"
           },
           "score" : 0,
           "team" : {
@@ -383,507 +857,138 @@
             "name" : "Los Angeles Dodgers",
             "link" : "/api/v1/teams/119"
           },
-          "isWinner" : false,
           "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
+          "seriesNumber" : 5
+        }
+      },
+      "venue" : {
+        "id" : 22,
+        "name" : "Dodger Stadium",
+        "link" : "/api/v1/venues/22"
+      },
+      "content" : {
+        "link" : "/api/v1/game/529597/content"
+      },
+      "doubleHeader" : "N",
+      "gamedayType" : "P",
+      "tiebreaker" : "N",
+      "gameNumber" : 1,
+      "calendarEventID" : "14-529597-2018-04-13",
+      "seasonDisplay" : "2018",
+      "dayNight" : "night",
+      "scheduledInnings" : 9,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
+      "seriesDescription" : "Regular Season",
+      "recordSource" : "S",
+      "ifNecessary" : "N",
+      "ifNecessaryDescription" : "Normal Game"
+    }, {
+      "gamePk" : 529605,
+      "link" : "/api/v1/game/529605/feed/live",
+      "gameType" : "R",
+      "season" : "2018",
+      "gameDate" : "2018-04-14T02:10:00Z",
+      "status" : {
+        "abstractGameState" : "Preview",
+        "codedGameState" : "S",
+        "detailedState" : "Scheduled",
+        "statusCode" : "S",
+        "abstractGameCode" : "P"
+      },
+      "teams" : {
+        "away" : {
           "leagueRecord" : {
             "wins" : 5,
-            "losses" : 1,
-            "pct" : ".833"
+            "losses" : 8,
+            "pct" : ".385"
           },
-          "score" : 3,
-          "team" : {
-            "id" : 109,
-            "name" : "Arizona Diamondbacks",
-            "link" : "/api/v1/teams/109"
-          },
-          "isWinner" : true,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 15,
-        "name" : "Chase Field",
-        "link" : "/api/v1/venues/15"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529489/content"
-      },
-      "isTie" : false,
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529489-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "day",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 3,
-      "seriesGameNumber" : 3,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "S",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529486,
-      "link" : "/api/v1/game/529486/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-04T20:07:00Z",
-      "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "F",
-        "detailedState" : "Final",
-        "statusCode" : "F",
-        "abstractGameCode" : "F"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 2,
-            "losses" : 4,
-            "pct" : ".333"
-          },
-          "score" : 2,
-          "team" : {
-            "id" : 114,
-            "name" : "Cleveland Indians",
-            "link" : "/api/v1/teams/114"
-          },
-          "isWinner" : false,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 5,
-            "losses" : 2,
-            "pct" : ".714"
-          },
-          "score" : 3,
-          "team" : {
-            "id" : 108,
-            "name" : "Los Angeles Angels",
-            "link" : "/api/v1/teams/108"
-          },
-          "isWinner" : true,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 1,
-        "name" : "Angel Stadium of Anaheim",
-        "link" : "/api/v1/venues/1"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529486/content"
-      },
-      "isTie" : false,
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529486-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "day",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 3,
-      "seriesGameNumber" : 3,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "S",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529490,
-      "link" : "/api/v1/game/529490/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-04T22:05:00Z",
-      "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "F",
-        "detailedState" : "Final",
-        "statusCode" : "F",
-        "abstractGameCode" : "F"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 3,
-            "losses" : 2,
-            "pct" : ".600"
-          },
-          "score" : 7,
-          "team" : {
-            "id" : 142,
-            "name" : "Minnesota Twins",
-            "link" : "/api/v1/teams/142"
-          },
-          "isWinner" : true,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 4,
-            "losses" : 1,
-            "pct" : ".800"
-          },
-          "score" : 3,
-          "team" : {
-            "id" : 134,
-            "name" : "Pittsburgh Pirates",
-            "link" : "/api/v1/teams/134"
-          },
-          "isWinner" : false,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 31,
-        "name" : "PNC Park",
-        "link" : "/api/v1/venues/31"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529490/content"
-      },
-      "isTie" : false,
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529490-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "night",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 2,
-      "seriesGameNumber" : 2,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "S",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529485,
-      "link" : "/api/v1/game/529485/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-04T23:07:00Z",
-      "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "O",
-        "detailedState" : "Game Over",
-        "statusCode" : "O",
-        "abstractGameCode" : "F"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 3,
-            "losses" : 2,
-            "pct" : ".600"
-          },
-          "score" : 4,
-          "team" : {
-            "id" : 145,
-            "name" : "Chicago White Sox",
-            "link" : "/api/v1/teams/145"
-          },
-          "isWinner" : true,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 4,
-            "losses" : 3,
-            "pct" : ".571"
-          },
-          "score" : 3,
-          "team" : {
-            "id" : 141,
-            "name" : "Toronto Blue Jays",
-            "link" : "/api/v1/teams/141"
-          },
-          "isWinner" : false,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 14,
-        "name" : "Rogers Centre",
-        "link" : "/api/v1/venues/14"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529485/content"
-      },
-      "isTie" : false,
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529485-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "night",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 3,
-      "seriesGameNumber" : 3,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "S",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529492,
-      "link" : "/api/v1/game/529492/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-04T23:15:00Z",
-      "status" : {
-        "abstractGameState" : "Final",
-        "codedGameState" : "O",
-        "detailedState" : "Game Over",
-        "statusCode" : "O",
-        "abstractGameCode" : "F"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 3,
-            "losses" : 2,
-            "pct" : ".600"
-          },
-          "score" : 1,
-          "team" : {
-            "id" : 136,
-            "name" : "Seattle Mariners",
-            "link" : "/api/v1/teams/136"
-          },
-          "isWinner" : false,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 3,
-            "losses" : 3,
-            "pct" : ".500"
-          },
-          "score" : 10,
-          "team" : {
-            "id" : 137,
-            "name" : "San Francisco Giants",
-            "link" : "/api/v1/teams/137"
-          },
-          "isWinner" : true,
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 2395,
-        "name" : "AT&T Park",
-        "link" : "/api/v1/venues/2395"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529492/content"
-      },
-      "isTie" : false,
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529492-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "day",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 2,
-      "seriesGameNumber" : 2,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "S",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529493,
-      "link" : "/api/v1/game/529493/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-04T23:40:00Z",
-      "status" : {
-        "abstractGameState" : "Live",
-        "codedGameState" : "I",
-        "detailedState" : "In Progress",
-        "statusCode" : "I",
-        "abstractGameCode" : "L"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 2,
-            "losses" : 3,
-            "pct" : ".400"
-          },
-          "score" : 6,
-          "team" : {
-            "id" : 138,
-            "name" : "St. Louis Cardinals",
-            "link" : "/api/v1/teams/138"
-          },
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 4,
-            "losses" : 1,
-            "pct" : ".800"
-          },
-          "score" : 0,
-          "team" : {
-            "id" : 158,
-            "name" : "Milwaukee Brewers",
-            "link" : "/api/v1/teams/158"
-          },
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        }
-      },
-      "venue" : {
-        "id" : 32,
-        "name" : "Miller Park",
-        "link" : "/api/v1/venues/32"
-      },
-      "content" : {
-        "link" : "/api/v1/game/529493/content"
-      },
-      "doubleHeader" : "N",
-      "gamedayType" : "P",
-      "tiebreaker" : "N",
-      "gameNumber" : 1,
-      "calendarEventID" : "14-529493-2018-04-04",
-      "seasonDisplay" : "2018",
-      "dayNight" : "night",
-      "scheduledInnings" : 9,
-      "gamesInSeries" : 3,
-      "seriesGameNumber" : 3,
-      "seriesDescription" : "Regular Season",
-      "recordSource" : "S",
-      "ifNecessary" : "N",
-      "ifNecessaryDescription" : "Normal Game"
-    }, {
-      "gamePk" : 529495,
-      "link" : "/api/v1/game/529495/feed/live",
-      "gameType" : "R",
-      "season" : "2018",
-      "gameDate" : "2018-04-05T02:05:00Z",
-      "status" : {
-        "abstractGameState" : "Live",
-        "codedGameState" : "I",
-        "detailedState" : "In Progress",
-        "statusCode" : "I",
-        "abstractGameCode" : "L"
-      },
-      "teams" : {
-        "away" : {
-          "leagueRecord" : {
-            "wins" : 2,
-            "losses" : 4,
-            "pct" : ".333"
-          },
-          "score" : 0,
-          "team" : {
-            "id" : 140,
-            "name" : "Texas Rangers",
-            "link" : "/api/v1/teams/140"
-          },
-          "splitSquad" : false,
-          "seriesNumber" : 2
-        },
-        "home" : {
-          "leagueRecord" : {
-            "wins" : 2,
-            "losses" : 4,
-            "pct" : ".333"
-          },
-          "score" : 0,
           "team" : {
             "id" : 133,
             "name" : "Oakland Athletics",
             "link" : "/api/v1/teams/133"
           },
           "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
+        },
+        "home" : {
+          "leagueRecord" : {
+            "wins" : 6,
+            "losses" : 4,
+            "pct" : ".600"
+          },
+          "team" : {
+            "id" : 136,
+            "name" : "Seattle Mariners",
+            "link" : "/api/v1/teams/136"
+          },
+          "splitSquad" : false,
+          "seriesNumber" : 5
         }
       },
       "venue" : {
-        "id" : 10,
-        "name" : "Oakland Coliseum",
-        "link" : "/api/v1/venues/10"
+        "id" : 680,
+        "name" : "Safeco Field",
+        "link" : "/api/v1/venues/680"
       },
       "content" : {
-        "link" : "/api/v1/game/529495/content"
+        "link" : "/api/v1/game/529605/content"
       },
       "doubleHeader" : "N",
       "gamedayType" : "P",
       "tiebreaker" : "N",
       "gameNumber" : 1,
-      "calendarEventID" : "14-529495-2018-04-04",
+      "calendarEventID" : "14-529605-2018-04-13",
       "seasonDisplay" : "2018",
       "dayNight" : "night",
       "scheduledInnings" : 9,
-      "gamesInSeries" : 4,
-      "seriesGameNumber" : 3,
+      "gamesInSeries" : 3,
+      "seriesGameNumber" : 1,
       "seriesDescription" : "Regular Season",
       "recordSource" : "S",
       "ifNecessary" : "N",
       "ifNecessaryDescription" : "Normal Game"
     }, {
-      "gamePk" : 529487,
-      "link" : "/api/v1/game/529487/feed/live",
+      "gamePk" : 529608,
+      "link" : "/api/v1/game/529608/feed/live",
       "gameType" : "R",
       "season" : "2018",
-      "gameDate" : "2018-04-05T02:10:00Z",
+      "gameDate" : "2018-04-14T02:10:00Z",
       "status" : {
-        "abstractGameState" : "Live",
-        "codedGameState" : "I",
-        "detailedState" : "In Progress",
-        "statusCode" : "I",
-        "abstractGameCode" : "L"
+        "abstractGameState" : "Preview",
+        "codedGameState" : "S",
+        "detailedState" : "Scheduled",
+        "statusCode" : "S",
+        "abstractGameCode" : "P"
       },
       "teams" : {
         "away" : {
           "leagueRecord" : {
-            "wins" : 2,
-            "losses" : 3,
-            "pct" : ".400"
+            "wins" : 6,
+            "losses" : 6,
+            "pct" : ".500"
           },
-          "score" : 0,
           "team" : {
-            "id" : 115,
-            "name" : "Colorado Rockies",
-            "link" : "/api/v1/teams/115"
+            "id" : 137,
+            "name" : "San Francisco Giants",
+            "link" : "/api/v1/teams/137"
           },
           "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
         },
         "home" : {
           "leagueRecord" : {
-            "wins" : 1,
-            "losses" : 4,
-            "pct" : ".200"
+            "wins" : 4,
+            "losses" : 10,
+            "pct" : ".286"
           },
-          "score" : 0,
           "team" : {
             "id" : 135,
             "name" : "San Diego Padres",
             "link" : "/api/v1/teams/135"
           },
           "splitSquad" : false,
-          "seriesNumber" : 2
+          "seriesNumber" : 5
         }
       },
       "venue" : {
@@ -892,18 +997,18 @@
         "link" : "/api/v1/venues/2680"
       },
       "content" : {
-        "link" : "/api/v1/game/529487/content"
+        "link" : "/api/v1/game/529608/content"
       },
       "doubleHeader" : "N",
       "gamedayType" : "P",
       "tiebreaker" : "N",
       "gameNumber" : 1,
-      "calendarEventID" : "14-529487-2018-04-04",
+      "calendarEventID" : "14-529608-2018-04-13",
       "seasonDisplay" : "2018",
       "dayNight" : "night",
       "scheduledInnings" : 9,
       "gamesInSeries" : 4,
-      "seriesGameNumber" : 3,
+      "seriesGameNumber" : 2,
       "seriesDescription" : "Regular Season",
       "recordSource" : "S",
       "ifNecessary" : "N",

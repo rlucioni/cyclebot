@@ -12,6 +12,7 @@
             ".git/*",
             ".gitignore",
             ".python-version",
+            "examples/*",
             "LICENSE",
             "Makefile",
             "README.md",
