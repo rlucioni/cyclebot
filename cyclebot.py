@@ -200,7 +200,7 @@ class Cyclebot:
             self.process_play(play)
 
         for player_id in self.players:
-            self.cycle_check(player_id)
+            self.cycle_alert(player_id)
 
     def ingest_game_feed(self):
         logger.info(f'ingesting feed for game {self.game_key}')
@@ -234,9 +234,9 @@ class Cyclebot:
         }
 
         if player_id in self.probable_pitchers:
-            self.pitching_alert_checks(player)
+            self.pitching_alerts(player)
 
-    def pitching_alert_checks(self, player):
+    def pitching_alerts(self, player):
         player_name = player['person']['fullName']
         player_id = player['person']['id']
         team_name = self.team['name']
@@ -388,7 +388,7 @@ class Cyclebot:
         else:
             logger.info(f'highlight unavailable for play {play_uuid}')
 
-    def cycle_check(self, player_id):
+    def cycle_alert(self, player_id):
         player = self.players[player_id]
         unique_hits = player['unique_hits']
         unique_hit_count = len(unique_hits)
