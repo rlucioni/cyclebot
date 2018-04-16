@@ -28,7 +28,7 @@ status:
 	zappa status prod
 
 tail:
-	zappa tail prod --since 30m
+	zappa tail prod --since 15m
 
 undeploy:
 	zappa undeploy prod --remove-logs
