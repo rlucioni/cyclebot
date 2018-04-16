@@ -8,11 +8,12 @@
             "expression": "rate(10 minutes)"
         }],
         "exclude": [
+            "__pycache__",
+            "examples",
             ".flake8",
-            ".git/*",
             ".gitignore",
             ".python-version",
-            "examples/*",
+            "docker-compose.yml",
             "LICENSE",
             "Makefile",
             "prune.py",
