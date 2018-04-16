@@ -22,7 +22,13 @@ Finally, set environment variables the app needs to function. These include conn
 
 ## Development
 
-`cyclebot` is a Python script. It can be run locally without using Lambda:
+cyclebot is a Python script. It can be run locally without using Lambda. First, start Redis using Docker Compose:
+
+```sh
+$ docker-compose up -d
+```
+
+Now you can run cyclebot:
 
 ```sh
 $ make cyclebot
