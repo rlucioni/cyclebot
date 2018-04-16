@@ -347,7 +347,7 @@ class Cyclebot:
         key = '-'.join([REDIS_KEY_VERSION] + [str(arg) for arg in args])
         return md5(key.encode('utf-8')).hexdigest()
 
-    def post_slack_message(self, message, channel='#sandbox'):
+    def post_slack_message(self, message, channel='#cyclebot'):
         self.slack.api_call(
             'chat.postMessage',
             channel=channel,
