@@ -1,5 +1,5 @@
 clean:
-	python cyclebot.py clean
+	python clean.py
 
 cyclebot:
 	python cyclebot.py
@@ -21,6 +21,8 @@ rollback:
 
 schedule:
 	zappa schedule prod
+
+ship: update clean
 
 status:
 	zappa status prod

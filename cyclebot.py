@@ -1,11 +1,9 @@
 import logging
 import os
-import sys
 from datetime import date, datetime, timedelta
 from hashlib import md5
 from logging.config import dictConfig
 
-import boto3
 import requests
 from dateutil import parser
 from praw import Reddit
@@ -64,9 +62,6 @@ REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
 REDDIT_USERAGENT = os.environ.get('REDDIT_USERAGENT')
 REDDIT_USERNAME = os.environ.get('REDDIT_USERNAME')
 REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD')
-
-FUNCTION_NAME = 'cyclebot-prod'
-KEEP_COUNT = 2
 
 
 # monkey patch to add support for nx/xx options
@@ -376,30 +371,5 @@ def poll():
     cyclebot.poll()
 
 
-def clean():
-    # https://boto3.readthedocs.io/en/latest/reference/services/lambda.html
-    client = boto3.client('lambda')
-
-    response = client.list_versions_by_function(FunctionName=FUNCTION_NAME)
-    qualifiers = [version['Version'] for version in response['Versions']]
-    versions = [int(q) for q in qualifiers if q != '$LATEST']
-    versions = sorted(versions, reverse=True)
-    to_delete = versions[KEEP_COUNT:]
-
-    logger.info(
-        f'found {FUNCTION_NAME} versions {versions}, will delete {to_delete}'
-    )
-
-    for version in to_delete:
-        logger.info(f'deleting version {version}')
-        client.delete_function(
-            FunctionName=FUNCTION_NAME,
-            Qualifier=str(version),
-        )
-
-
 if __name__ == '__main__':
-    if sys.argv[-1] == 'clean':
-        clean()
-    else:
-        poll()
+    poll()
