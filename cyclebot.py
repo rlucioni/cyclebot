@@ -44,10 +44,11 @@ REDIS_KEY_VERSION = str(os.environ.get('REDIS_KEY_VERSION', 1))
 REDIS_EXPIRE_SECONDS = int(os.environ.get('REDIS_EXPIRE_SECONDS', 3600 * 24))
 
 MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
-CAPTIVATING_INDEX_THRESHOLD = int(os.environ.get('CAPTIVATING_INDEX_THRESHOLD', 75))
+MIN_CAPTIVATING_INDEX = int(os.environ.get('MIN_CAPTIVATING_INDEX', 75))
 STALE_PLAY_SECONDS = int(os.environ.get('STALE_PLAY_SECONDS', 900))
 PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
-UNIQUE_HIT_COUNT_THRESHOLD = int(os.environ.get('UNIQUE_HIT_COUNT_THRESHOLD', 3))
+PITCHING_ALERT_INNINGS = int(os.environ.get('PITCHING_ALERT_INNINGS', 6))
+CYCLE_ALERT_HITS = int(os.environ.get('CYCLE_ALERT_HITS', 3))
 HITS = {
     'single': '1B',
     'double': '2B',
@@ -57,7 +58,6 @@ HITS = {
 FAVORITE_PLAYER_IDS = [
     int(player_id) for player_id in os.environ.get('FAVORITE_PLAYER_IDS', '660271,592450').split(',')
 ]
-PITCHING_ALERT_INNINGS = int(os.environ.get('PITCHING_ALERT_INNINGS', 6))
 
 SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
 SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', '#cyclebot')
@@ -313,7 +313,7 @@ class Cyclebot:
             is_hr = hit_code == 'HR'
 
             captivating_index = play['about'].get('captivatingIndex', 0)
-            is_captivating = captivating_index >= CAPTIVATING_INDEX_THRESHOLD
+            is_captivating = captivating_index >= MIN_CAPTIVATING_INDEX
 
             is_favorite = batter_id in FAVORITE_PLAYER_IDS
 
@@ -394,7 +394,7 @@ class Cyclebot:
         unique_hit_count = len(unique_hits)
 
         # TODO: message if player completes the cycle
-        if unique_hit_count >= UNIQUE_HIT_COUNT_THRESHOLD:
+        if unique_hit_count >= CYCLE_ALERT_HITS:
             name = player['name']
             joined_hits = ', '.join(unique_hits)
 
