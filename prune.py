@@ -34,7 +34,7 @@ FUNCTION_NAME = 'cyclebot-prod'
 KEEP_COUNT = 2
 
 
-def clean():
+def prune():
     # https://boto3.readthedocs.io/en/latest/reference/services/lambda.html
     client = boto3.client('lambda')
 
@@ -57,4 +57,4 @@ def clean():
 
 
 if __name__ == '__main__':
-    clean()
+    prune()

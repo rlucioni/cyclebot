@@ -1,6 +1,3 @@
-clean:
-	python clean.py
-
 cyclebot:
 	python cyclebot.py
 
@@ -13,6 +10,9 @@ lint:
 package:
 	zappa package prod
 
+prune:
+	python prune.py
+
 requirements:
 	pip install -r requirements.txt
 
@@ -22,7 +22,7 @@ rollback:
 schedule:
 	zappa schedule prod
 
-ship: update clean
+ship: update prune
 
 status:
 	zappa status prod

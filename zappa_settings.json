@@ -15,6 +15,7 @@
             "examples/*",
             "LICENSE",
             "Makefile",
+            "prune.py",
             "README.md",
             "requirements.txt",
             "zappa_settings.json",
