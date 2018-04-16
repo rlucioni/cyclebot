@@ -393,7 +393,6 @@ class Cyclebot:
         unique_hits = player['unique_hits']
         unique_hit_count = len(unique_hits)
 
-        # TODO: message if player completes the cycle
         if unique_hit_count >= CYCLE_ALERT_HITS:
             name = player['name']
             joined_hits = ', '.join(unique_hits)
@@ -411,11 +410,14 @@ class Cyclebot:
 
             hits = player['hits']
             at_bats = player['at_bats']
-            # TODO: only post cycle alert if before 9th inning and player already has a 3B
-            # TODO: include data about how likely player is to get missing hit (count of missing hit / plate apps)
-            self.post_slack_message(
-                f'CYCLE ALERT: {name} {hits}-{at_bats} with {joined_hits} in the {self.inning_ordinal} inning'
-            )
+            if unique_hit_count == len(HITS):
+                self.post_slack_message(f'CYCLE ALERT: {name} {hits}-{at_bats} has hit for the cycle!')
+            else:
+                # TODO: include data about how likely player is to get missing hit (count of missing hit / plate apps)
+                self.post_slack_message(
+                    'CYCLE ALERT: '
+                    f'{name} {hits}-{at_bats} with {joined_hits} in the {self.inning_ordinal} inning'
+                )
 
     def now(self):
         return int(datetime.now().timestamp())
