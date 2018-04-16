@@ -56,6 +56,7 @@ HITS = {
 }
 
 SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
+SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', '#cyclebot')
 
 REDDIT_CLIENT_ID = os.environ.get('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
@@ -347,7 +348,7 @@ class Cyclebot:
         key = '-'.join([REDIS_KEY_VERSION] + [str(arg) for arg in args])
         return md5(key.encode('utf-8')).hexdigest()
 
-    def post_slack_message(self, message, channel='#cyclebot'):
+    def post_slack_message(self, message, channel=SLACK_CHANNEL):
         self.slack.api_call(
             'chat.postMessage',
             channel=channel,
