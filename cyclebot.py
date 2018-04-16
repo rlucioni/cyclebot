@@ -223,7 +223,7 @@ class Cyclebot:
             for player in team['players'].values():
                 self.process_player(player)
 
-    def process_player(self, player, team):
+    def process_player(self, player):
         player_id = int(player['person']['id'])
         self.players[player_id] = {
             'id': player_id,
