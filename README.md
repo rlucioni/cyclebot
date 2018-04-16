@@ -1,6 +1,6 @@
 # cyclebot
 
-cyclebot polls live MLB data feeds to provide links to general game highlights and alerts when players are close to [hitting for the cycle](https://en.wikipedia.org/wiki/Hitting_for_the_cycle).
+cyclebot polls live MLB data feeds to provide links to game highlights and alerts as players approach notable achievements such as [hitting for the cycle](https://en.wikipedia.org/wiki/Hitting_for_the_cycle).
 
 ## Quickstart
 
@@ -42,4 +42,4 @@ $ make lint
 
 ## Design
 
-MLB operates an API that provides live data feeds of every game. cyclebot polls these streams. It looks for plays with a high "captivating index," a stat meant to indicate how interesting a given play is, and also keeps a record of every player's batting performance. The bot makes a best effort to locate and share interesting highlight videos using a separate MLB content API. It also sends alerts when a player is nearing the cycle.
+MLB operates an API that provides live data feeds of every game. cyclebot polls these streams. It looks for plays with a high "captivating index," a stat meant to indicate how interesting a given play is. It also monitors every player's batting and pitching performances. The bot makes a best effort to locate and share interesting highlight videos using a separate MLB content API. It also sends alerts as players approach notable achievements. These include cycles, no-hitters, and complete-game shutouts.
