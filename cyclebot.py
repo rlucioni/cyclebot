@@ -445,7 +445,11 @@ cyclebot = Cyclebot()
 
 
 def poll():
-    cyclebot.poll()
+    # prevent lambda from re-invoking when an exception is raised
+    try:
+        cyclebot.poll()
+    except:
+        logger.exception('something went wrong')
 
 
 if __name__ == '__main__':
