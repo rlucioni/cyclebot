@@ -54,6 +54,9 @@ HITS = {
     'triple': '3B',
     'home run': 'HR',
 }
+FAVORITE_PLAYER_IDS = [
+    int(player_id) for player_id in os.environ.get('FAVORITE_PLAYER_IDS', '660271,592450').split(',')
+]
 
 SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
 SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', '#cyclebot')
@@ -244,8 +247,14 @@ class Cyclebot:
             if hit_code not in batter['unique_hits']:
                 batter['unique_hits'].append(hit_code)
 
+            is_hr = hit_code == 'HR'
+
             captivating_index = play['about'].get('captivatingIndex', 0)
-            if hit_code == 'HR' or captivating_index >= CAPTIVATING_INDEX_THRESHOLD:
+            is_captivating = captivating_index >= CAPTIVATING_INDEX_THRESHOLD
+
+            is_favorite = batter_id in FAVORITE_PLAYER_IDS
+
+            if any([is_hr, is_captivating, is_favorite]):
                 self.seek_highlight(play, batter, hit_code, captivating_index)
 
     def seek_highlight(self, play, batter, hit_code, captivating_index):
