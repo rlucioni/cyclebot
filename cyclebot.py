@@ -329,7 +329,12 @@ class Cyclebot:
                 self.seek_highlight(play, batter, hit_code, captivating_index)
 
     def seek_highlight(self, play, batter, hit_code, captivating_index):
-        play_uuid = play['playEvents'][-1]['playId']
+        play_uuid = play['playEvents'][-1].get('playId')
+        if not play_uuid:
+            start_time = play['about'].get('startTime')
+            logger.info(f'no uuid for play @ {start_time}')
+            return
+
         batter_name = batter['name']
         batter_id = batter['id']
 
@@ -369,7 +374,10 @@ class Cyclebot:
         highlights_by_player_id = {}
 
         for highlight_id in highlight_ids:
-            highlight = self.highlights[int(highlight_id)]
+            highlight = self.highlights.get(int(highlight_id))
+            if not highlight:
+                logger.info(f'no ingested highlight with id {highlight_id}')
+                continue
 
             for keyword in highlight['keywordsAll']:
                 if keyword['type'] == 'sv_id':
