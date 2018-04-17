@@ -5,7 +5,7 @@
         "events": [{
             "function": "cyclebot.poll",
             // https://docs.aws.amazon.com/lambda/latest/dg/tutorial-scheduled-events-schedule-expressions.html
-            "expression": "rate(5 minutes)"
+            "expression": "rate(1 minute)"
         }],
         "exception_handler": "cyclebot.exception_handler",
         "exclude": [
