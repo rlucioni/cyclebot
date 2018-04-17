@@ -153,7 +153,7 @@ class Cyclebot:
             try:
                 self.process_game()
             except:
-                logger.exception(f'something went wrong processing game {game_key}')
+                logger.exception(f'unable to process game {game_key}')
 
     def ingest_game_keys(self):
         today = date.today()
@@ -201,7 +201,11 @@ class Cyclebot:
         self.ingest_game_content()
 
         for play in self.plays:
-            self.process_play(play)
+            try:
+                self.process_play(play)
+            except:
+                start_time = play['about'].get('startTime')
+                logger.exception(f'unable to process play @ {start_time}')
 
         for player_id in self.players:
             self.cycle_alert(player_id)
