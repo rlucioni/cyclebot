@@ -149,7 +149,11 @@ class Cyclebot:
 
         for game_key in self.game_keys:
             self.game_key = game_key
-            self.process_game()
+
+            try:
+                self.process_game()
+            except:
+                logger.exception(f'something went wrong processing game {game_key}')
 
     def ingest_game_keys(self):
         today = date.today()
