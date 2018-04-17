@@ -251,6 +251,7 @@ class Cyclebot:
 
         hits = player['stats']['pitching'].get('hits', 0)
         runs = player['stats']['pitching'].get('runs', 0)
+        pitches_thrown = player['stats']['pitching'].get('pitchesThrown', 0)
         innings_pitched = float(player['stats']['pitching'].get('inningsPitched', '0.0'))
 
         is_alertable = innings_pitched >= PITCHING_ALERT_INNINGS
@@ -285,7 +286,8 @@ class Cyclebot:
             self.redis.set(cache_key, 1, ex=REDIS_EXPIRE_SECONDS)
             self.post_slack_message(
                 f'{alert.upper()} ALERT: '
-                f'{player_name} ({team_name}) has pitched {innings_pitched} {adjective} innings'
+                f'{player_name} ({team_name}) has thrown {pitches_thrown} pitches '
+                f'over {innings_pitched} {adjective} innings'
             )
 
     def ingest_game_content(self):
