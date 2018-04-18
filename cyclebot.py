@@ -238,6 +238,7 @@ class Cyclebot:
             'name': player['person']['fullName'],
             'hits': player['stats']['batting'].get('hits', 0),
             'at_bats': player['stats']['batting'].get('atBats', 0),
+            'hrs': player['seasonStats']['batting'].get('homeRuns', 0),
             'unique_hits': [],
         }
 
@@ -326,9 +327,9 @@ class Cyclebot:
             is_favorite = batter_id in FAVORITE_PLAYER_IDS
 
             if any([is_hr, is_captivating, is_favorite]):
-                self.seek_highlight(play, batter, hit_code, captivating_index)
+                self.seek_highlight(play, batter, hit_code, captivating_index, is_hr=is_hr)
 
-    def seek_highlight(self, play, batter, hit_code, captivating_index):
+    def seek_highlight(self, play, batter, hit_code, captivating_index, is_hr=False):
         play_uuid = play['playEvents'][-1].get('playId')
         if not play_uuid:
             start_time = play['about'].get('startTime')
@@ -399,7 +400,12 @@ class Cyclebot:
                     break
 
             description = highlight['description']
-            self.post_slack_message(f'<{playback_url}|{description}> ({play_uuid})')
+            optional = ''
+            if is_hr:
+                hrs = batter['hrs']
+                optional = f' ({hrs} HR)'
+
+            self.post_slack_message(f'<{playback_url}|{description}>{optional}')
             self.post_reddit_link(description, playback_url)
         else:
             logger.info(f'highlight unavailable for play {play_uuid}')
