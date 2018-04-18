@@ -315,10 +315,8 @@ class Cyclebot:
             batter_id = int(play['matchup']['batter']['id'])
             batter = self.players[batter_id]
 
-            is_unique_hit = False
             if hit_code not in batter['unique_hits']:
                 batter['unique_hits'].append(hit_code)
-                is_unique_hit = True
 
             is_hr = hit_code == 'HR'
 
@@ -327,7 +325,7 @@ class Cyclebot:
 
             is_favorite = batter_id in FAVORITE_PLAYER_IDS
 
-            if any([is_unique_hit, is_hr, is_captivating, is_favorite]):
+            if any([is_hr, is_captivating, is_favorite]):
                 self.seek_highlight(play, batter, hit_code, captivating_index)
 
     def seek_highlight(self, play, batter, hit_code, captivating_index):
