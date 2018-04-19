@@ -236,6 +236,7 @@ class Cyclebot:
         self.players[player_id] = {
             'id': player_id,
             'name': player['person']['fullName'],
+            'team_name': self.team['name'],
             'hits': player['stats']['batting'].get('hits', 0),
             'at_bats': player['stats']['batting'].get('atBats', 0),
             'hrs': player['seasonStats']['batting'].get('homeRuns', 0),
@@ -417,28 +418,32 @@ class Cyclebot:
 
         if unique_hit_count >= CYCLE_ALERT_HITS:
             name = player['name']
+            team_name = player['team_name']
             joined_hits = ', '.join(unique_hits)
 
             cache_key = self.make_key(self.game_key, player_id, unique_hit_count)
             is_cached = bool(self.redis.get(cache_key))
 
             if is_cached:
-                logger.info(f'ignoring cached cycle: {name} with {joined_hits}')
+                logger.info(f'ignoring cached cycle: {name} ({team_name}) with {joined_hits}')
                 return
 
-            logger.info(f'new cycle alert: {name} with {joined_hits}')
+            logger.info(f'new cycle alert: {name} ({team_name}) with {joined_hits}')
 
             self.redis.set(cache_key, 1, ex=REDIS_EXPIRE_SECONDS)
 
             hits = player['hits']
             at_bats = player['at_bats']
             if unique_hit_count == len(HITS):
-                self.post_slack_message(f'CYCLE ALERT: {name} {hits}-{at_bats} has hit for the cycle!')
-            else:
-                # TODO: include data about how likely player is to get missing hit (count of missing hit / plate apps)
                 self.post_slack_message(
-                    'CYCLE ALERT: '
-                    f'{name} {hits}-{at_bats} with {joined_hits} in the {self.inning_ordinal} inning'
+                    f'CYCLE ALERT: {name} ({team_name}) {hits}-{at_bats} has hit for the cycle!'
+                )
+            else:
+                # TODO: include data about how likely player is to get missing hit
+                # (count of missing hit / plate apps)
+                self.post_slack_message(
+                    f'CYCLE ALERT: {name} ({team_name}) {hits}-{at_bats} '
+                    f'with {joined_hits} in the {self.inning_ordinal} inning'
                 )
 
     def now(self):
