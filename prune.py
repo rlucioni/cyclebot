@@ -3,6 +3,7 @@ from logging.config import dictConfig
 
 import boto3
 
+
 dictConfig({
     'version': 1,
     'disable_existing_loggers': False,

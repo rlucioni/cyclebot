@@ -5,7 +5,7 @@ deploy:
 	zappa deploy prod
 
 lint:
-	flake8 cyclebot.py
+	flake8 .
 
 package:
 	zappa package prod
@@ -29,6 +29,9 @@ status:
 
 tail:
 	zappa tail prod --since 5m
+
+test:
+	pytest
 
 undeploy:
 	zappa undeploy prod --remove-logs
