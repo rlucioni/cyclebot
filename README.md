@@ -8,37 +8,35 @@ This project uses [Zappa](https://github.com/Miserlou/Zappa) to deploy a simple 
 
 Install requirements:
 
-```sh
-$ make requirements
-```
+    $ make requirements
 
 Package and deploy the service:
 
-```sh
-$ make deploy
-```
+    $ make deploy
 
 Finally, set environment variables the app needs to function. These include connection details for an external Redis instance. You can use a service like [ElastiCache](https://aws.amazon.com/elasticache/redis/) or [Redis Labs](https://redislabs.com/) for this.
+
+If you make a change and want to deploy again:
+
+    $ make ship
 
 ## Development
 
 cyclebot is a Python script. It can be run locally without using Lambda. First, start Redis using Docker Compose:
 
-```sh
-$ docker-compose up -d
-```
+    $ docker-compose up -d
 
-Now you can run cyclebot:
+Run cyclebot:
 
-```sh
-$ make cyclebot
-```
+    $ make cyclebot
 
-To run the linter ([Flake8](http://flake8.pycqa.org/)):
+Run the linter ([Flake8](http://flake8.pycqa.org/)):
 
-```sh
-$ make lint
-```
+    $ make lint
+
+Run tests ([Flake8](http://flake8.pycqa.org/)):
+
+    $ make test
 
 ## Design
 

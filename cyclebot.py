@@ -1,6 +1,7 @@
 import logging
 import os
-from datetime import date, datetime, timedelta
+import time
+from datetime import date, timedelta
 from hashlib import md5
 from logging.config import dictConfig
 
@@ -9,6 +10,7 @@ from dateutil import parser
 from praw import Reddit
 from redis import StrictRedis, RedisError
 from slackclient import SlackClient
+
 
 dictConfig({
     'version': 1,
@@ -37,36 +39,33 @@ dictConfig({
 
 logger = logging.getLogger(__name__)
 
-REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
-REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
-REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
-REDIS_KEY_VERSION = str(os.environ.get('REDIS_KEY_VERSION', 1))
-REDIS_EXPIRE_SECONDS = int(os.environ.get('REDIS_EXPIRE_SECONDS', 3600 * 24))
-
-MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
-MIN_CAPTIVATING_INDEX = int(os.environ.get('MIN_CAPTIVATING_INDEX', 75))
-STALE_PLAY_SECONDS = int(os.environ.get('STALE_PLAY_SECONDS', 900))
-PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
-PITCHING_ALERT_INNINGS = int(os.environ.get('PITCHING_ALERT_INNINGS', 6))
 CYCLE_ALERT_HITS = int(os.environ.get('CYCLE_ALERT_HITS', 3))
+FAVORITE_PLAYER_IDS = [
+    int(player_id) for player_id in os.environ.get('FAVORITE_PLAYER_IDS', '660271,592450').split(',')
+]
 HITS = {
     'single': '1B',
     'double': '2B',
     'triple': '3B',
     'home run': 'HR',
 }
-FAVORITE_PLAYER_IDS = [
-    int(player_id) for player_id in os.environ.get('FAVORITE_PLAYER_IDS', '660271,592450').split(',')
-]
-
-SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
-SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', '#cyclebot')
-
+MIN_CAPTIVATING_INDEX = int(os.environ.get('MIN_CAPTIVATING_INDEX', 75))
+MLB_STATS_ORIGIN = 'https://statsapi.mlb.com'
+PITCHING_ALERT_INNINGS = int(os.environ.get('PITCHING_ALERT_INNINGS', 7))
+PLAYBACK_RESOLUTION = os.environ.get('PLAYBACK_RESOLUTION', '2500K')
 REDDIT_CLIENT_ID = os.environ.get('REDDIT_CLIENT_ID')
 REDDIT_CLIENT_SECRET = os.environ.get('REDDIT_CLIENT_SECRET')
+REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD')
 REDDIT_USERAGENT = os.environ.get('REDDIT_USERAGENT')
 REDDIT_USERNAME = os.environ.get('REDDIT_USERNAME')
-REDDIT_PASSWORD = os.environ.get('REDDIT_PASSWORD')
+REDIS_EXPIRE_SECONDS = int(os.environ.get('REDIS_EXPIRE_SECONDS', 3600 * 24))
+REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+REDIS_KEY_VERSION = str(os.environ.get('REDIS_KEY_VERSION', 1))
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
+REDIS_PORT = int(os.environ.get('REDIS_PORT', 6379))
+SLACK_API_TOKEN = os.environ.get('SLACK_API_TOKEN')
+SLACK_CHANNEL = os.environ.get('SLACK_CHANNEL', '#cyclebot')
+STALE_PLAY_SECONDS = int(os.environ.get('STALE_PLAY_SECONDS', 900))
 
 
 # monkey patch to add support for nx/xx options
@@ -447,7 +446,7 @@ class Cyclebot:
                 )
 
     def now(self):
-        return int(datetime.now().timestamp())
+        return int(time.time())
 
     def make_key(self, *args):
         key = '-'.join([REDIS_KEY_VERSION] + [str(arg) for arg in args])
@@ -470,12 +469,9 @@ class Cyclebot:
         )
 
 
-cyclebot = Cyclebot()
-
-
 def poll():
     try:
-        cyclebot.poll()
+        Cyclebot().poll()
     except:
         logger.exception('something went wrong')
 

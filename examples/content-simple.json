@@ -1,0 +1,21 @@
+{
+  "highlights" : {
+    "live" : {
+      "items" : [ {
+        "id" : "1934626183",
+        "description" : "Todd Frazier launches his second home run of the game, a solo shot to left field to give the Mets a 3-2 lead in the bottom of the 4th inning",
+        "keywordsAll" : [ {
+          "type" : "player_id",
+          "value" : "453943",
+        }, {
+          "type" : "sv_id",
+          "value" : "b17ec49e-80d4-423d-b598-e62ddeef0a01",
+        } ],
+        "playbacks" : [ {
+          "name" : "FLASH_2500K_1280X720",
+          "url" : "https://mediadownloads.mlb.com/mlbam/mp4/2018/04/14/1934626183/1523666445692/asset_2500K.mp4"
+        } ]
+      } ]
+    },
+  },
+}

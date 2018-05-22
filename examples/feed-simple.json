@@ -1,0 +1,167 @@
+{
+  "gameData" : {
+    "probablePitchers" : {
+      "away" : {
+        "id" : 605200,
+      },
+      "home" : {
+        "id" : 571927,
+      }
+    }
+  },
+  "liveData" : {
+    "plays" : {
+      "allPlays" : [ {
+        "result" : {
+          "event" : "Double",
+        },
+        "about" : {
+          "startTime" : "2018-04-13T23:25:57.000Z",
+          "endTime" : "2018-04-13T23:27:23.000Z",
+          "captivatingIndex" : 34
+        },
+        "matchup" : {
+          "batter" : {
+            "id" : 452678,
+          },
+        },
+        "playEvents" : [ {
+          "playId" : "bc39107e-d248-46f2-ab62-bb1815c9ad40",
+        } ]
+      } ]
+    },
+    "linescore" : {
+      "currentInningOrdinal" : "6th"
+    },
+    "boxscore" : {
+      "teams" : {
+        "away" : {
+          "team" : {
+            "name" : "Milwaukee Brewers",
+          },
+          "players" : {
+            "ID460075" : {
+              "person" : {
+                "id" : 460075,
+                "fullName" : "Ryan Braun",
+              },
+              "stats" : {
+                "batting" : {
+                  "flyOuts" : 0,
+                  "groundOuts" : 2,
+                  "runs" : 1,
+                  "doubles" : 0,
+                  "triples" : 0,
+                  "homeRuns" : 1,
+                  "strikeOuts" : 0,
+                  "baseOnBalls" : 0,
+                  "hits" : 1,
+                  "hitByPitch" : 0,
+                  "rbi" : 2,
+                  "caughtStealing" : 0,
+                  "stolenBases" : 0,
+                  "atBats" : 3,
+                  "leftOnBase" : 1,
+                  "sacBunts" : 0,
+                  "sacFlies" : 0
+                },
+                "pitching" : { },
+              },
+              "seasonStats" : {
+                "batting" : {
+                  "runs" : 4,
+                  "homeRuns" : 3,
+                  "strikeOuts" : 13,
+                  "baseOnBalls" : 3,
+                  "hits" : 8,
+                  "avg" : ".178",
+                  "obp" : ".224",
+                  "slg" : ".400",
+                  "ops" : ".624",
+                  "rbi" : 8
+                },
+                "pitching" : { },
+              },
+            }
+          },
+        },
+        "home" : {
+          "team" : {
+            "name" : "New York Mets",
+          },
+          "players" : {
+            "ID571927" : {
+              "person" : {
+                "id" : 571927,
+                "fullName" : "Steven Matz",
+              },
+              "stats" : {
+                "batting" : {
+                  "flyOuts" : 0,
+                  "groundOuts" : 1,
+                  "runs" : 0,
+                  "doubles" : 0,
+                  "triples" : 0,
+                  "homeRuns" : 0,
+                  "strikeOuts" : 1,
+                  "baseOnBalls" : 0,
+                  "hits" : 0,
+                  "hitByPitch" : 0,
+                  "rbi" : 0,
+                  "caughtStealing" : 0,
+                  "stolenBases" : 0,
+                  "atBats" : 2,
+                  "leftOnBase" : 1,
+                  "sacBunts" : 0,
+                  "sacFlies" : 0
+                },
+                "pitching" : {
+                  "runs" : 4,
+                  "homeRuns" : 2,
+                  "strikeOuts" : 4,
+                  "baseOnBalls" : 2,
+                  "hits" : 3,
+                  "inningsPitched" : "5.0",
+                  "earnedRuns" : 3,
+                  "battersFaced" : 21,
+                  "outs" : 15,
+                  "pitchesThrown" : 82,
+                  "balls" : 28,
+                  "strikes" : 54
+                },
+              },
+              "seasonStats" : {
+                "batting" : {
+                  "runs" : 0,
+                  "homeRuns" : 0,
+                  "strikeOuts" : 2,
+                  "baseOnBalls" : 0,
+                  "hits" : 0,
+                  "avg" : ".000",
+                  "obp" : ".000",
+                  "slg" : ".000",
+                  "ops" : ".000",
+                  "rbi" : 0
+                },
+                "pitching" : {
+                  "runs" : 8,
+                  "strikeOuts" : 16,
+                  "baseOnBalls" : 7,
+                  "hits" : 10,
+                  "era" : "3.86",
+                  "inningsPitched" : "14.0",
+                  "wins" : 0,
+                  "losses" : 1,
+                  "saves" : 0,
+                  "holds" : 0,
+                  "blownSaves" : 0,
+                  "earnedRuns" : 6
+                },
+              },
+            },
+          },
+        }
+      },
+    },
+  }
+}

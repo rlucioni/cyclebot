@@ -1,12 +1,4 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# pyenv
-.python-version
-
-# macOS
 .DS_Store
+.pytest_cache/
+.python-version
+__pycache__/
