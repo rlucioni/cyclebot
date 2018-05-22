@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.6"
+
+cache:
+  - pip
+
+# services:
+#   - redis-server
+
+before_script:
+  - docker-compose up -d
+
+script:
+  - make lint
+  - make test
