@@ -5,9 +5,6 @@ python:
 cache:
   - pip
 
-# services:
-#   - redis-server
-
 before_script:
   - docker-compose up -d
 
