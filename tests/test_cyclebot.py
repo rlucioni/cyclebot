@@ -60,7 +60,7 @@ class TestCyclebot:
         assert body['text'] == message
 
     @responses.activate
-    def test_ingest(self):
+    def test_ingest_preview(self):
         empty = Schedule()
         responses.add(
             responses.GET,
@@ -80,10 +80,19 @@ class TestCyclebot:
         poll()
 
         self.assert_calls(self.yesterday_url, self.today_url)
-        self.reset_calls()
+
+    @responses.activate
+    def test_ingest_live(self):
+        empty = Schedule()
+        responses.add(
+            responses.GET,
+            self.yesterday_url,
+            match_querystring=True,
+            json=empty.serialized(),
+        )
 
         schedule = Schedule([self.game_key, 'live'])
-        responses.replace(
+        responses.add(
             responses.GET,
             self.today_url,
             match_querystring=True,
@@ -107,10 +116,19 @@ class TestCyclebot:
         poll()
 
         self.assert_calls(self.yesterday_url, self.today_url, self.feed_url, self.content_url)
-        self.reset_calls()
+
+    @responses.activate
+    def test_ingest_final(self):
+        empty = Schedule()
+        responses.add(
+            responses.GET,
+            self.yesterday_url,
+            match_querystring=True,
+            json=empty.serialized(),
+        )
 
         schedule = Schedule([self.game_key, 'final'])
-        responses.replace(
+        responses.add(
             responses.GET,
             self.today_url,
             match_querystring=True,
