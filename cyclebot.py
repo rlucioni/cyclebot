@@ -333,10 +333,11 @@ class Cyclebot:
 
     def home_run_alert(self, play, batter):
         play_uuid = play['playEvents'][-1].get('playId')
+        batter_id = batter['id']
         batter_name = batter['name']
         hrs = batter['hrs']
 
-        cache_key = self.make_key(play_uuid, batter_name, hrs)
+        cache_key = self.make_key(play_uuid, batter_id)
         is_cached = bool(self.redis.get(cache_key))
 
         if is_cached:
