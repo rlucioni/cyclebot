@@ -356,8 +356,16 @@ class TestCyclebot:
         poll()
 
         # warm up cache
-        self.assert_calls(self.yesterday_url, self.today_url, self.feed_url, self.content_url, self.slack_url)
-        self.assert_slack(responses.calls[4], '<https://www.example.com/123/2500K.mp4|something happened> (14 HR)')
+        self.assert_calls(
+            self.yesterday_url,
+            self.today_url,
+            self.feed_url,
+            self.content_url,
+            self.slack_url,
+            self.slack_url,
+        )
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (14 HR)')
+        self.assert_slack(responses.calls[5], '<https://www.example.com/123/2500K.mp4|something happened>')
         self.reset_calls()
 
         poll()
@@ -380,8 +388,16 @@ class TestCyclebot:
         poll()
 
         # warm up cache
-        self.assert_calls(self.yesterday_url, self.today_url, self.feed_url, self.content_url, self.slack_url)
-        self.assert_slack(responses.calls[4], '<https://www.example.com/123/2500K.mp4|something happened> (14 HR)')
+        self.assert_calls(
+            self.yesterday_url,
+            self.today_url,
+            self.feed_url,
+            self.content_url,
+            self.slack_url,
+            self.slack_url,
+        )
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (14 HR)')
+        self.assert_slack(responses.calls[5], '<https://www.example.com/123/2500K.mp4|something happened>')
         self.reset_calls()
 
         poll()
@@ -396,7 +412,14 @@ class TestCyclebot:
         with freeze_time('2018-04-13 15:15:00'):
             poll()
 
-        self.assert_calls(self.yesterday_url, self.today_url, self.feed_url, self.content_url)
+        self.assert_calls(
+            self.yesterday_url,
+            self.today_url,
+            self.feed_url,
+            self.content_url,
+            self.slack_url,
+        )
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (14 HR)')
         self.reset_calls()
 
         boring_play = Play(bob.id, captivating_index=10)
@@ -572,9 +595,17 @@ class TestCyclebot:
 
         poll()
 
-        self.assert_calls(self.yesterday_url, self.today_url, self.feed_url, self.content_url, self.slack_url)
+        self.assert_calls(
+            self.yesterday_url,
+            self.today_url,
+            self.feed_url,
+            self.content_url,
+            self.slack_url,
+            self.slack_url,
+        )
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (0 HR)')
         self.assert_slack(
-            responses.calls[4],
+            responses.calls[5],
             'CYCLE ALERT: bob (New York Yankees) '
             '5-6 has hit for the cycle!'
         )
