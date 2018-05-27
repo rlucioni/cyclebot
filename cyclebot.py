@@ -341,10 +341,12 @@ class Cyclebot:
         is_cached = bool(self.redis.get(cache_key))
 
         if is_cached:
-            logger.info(f'ignoring cached home run {play_uuid} {batter_name} {hrs}')
+            logger.info(f'ignoring cached home run {play_uuid} {batter_name}')
             return
 
         self.redis.set(cache_key, 1, ex=REDIS_EXPIRE_SECONDS)
+
+        logger.info(f'new home run alert: {play_uuid} {batter_name}')
 
         self.post_slack_message(f'HR ALERT: {batter_name} ({hrs} HR)')
 
