@@ -38,6 +38,15 @@ class TestCyclebot:
     def flush_redis(self):
         StrictRedis().flushall()
 
+    @pytest.fixture(autouse=True)
+    def add_empty_yesterday(self):
+        responses.add(
+            responses.GET,
+            self.yesterday_url,
+            match_querystring=True,
+            json=Schedule().serialized(),
+        )
+
     def assert_calls(self, *urls):
         assert len(responses.calls) == len(urls)
 
@@ -61,14 +70,6 @@ class TestCyclebot:
 
     @responses.activate
     def test_ingest_preview(self):
-        empty = Schedule()
-        responses.add(
-            responses.GET,
-            self.yesterday_url,
-            match_querystring=True,
-            json=empty.serialized(),
-        )
-
         schedule = Schedule([self.game_key, 'preview'])
         responses.add(
             responses.GET,
@@ -83,14 +84,6 @@ class TestCyclebot:
 
     @responses.activate
     def test_ingest_live(self):
-        empty = Schedule()
-        responses.add(
-            responses.GET,
-            self.yesterday_url,
-            match_querystring=True,
-            json=empty.serialized(),
-        )
-
         schedule = Schedule([self.game_key, 'live'])
         responses.add(
             responses.GET,
@@ -119,14 +112,6 @@ class TestCyclebot:
 
     @responses.activate
     def test_ingest_final(self):
-        empty = Schedule()
-        responses.add(
-            responses.GET,
-            self.yesterday_url,
-            match_querystring=True,
-            json=empty.serialized(),
-        )
-
         schedule = Schedule([self.game_key, 'final'])
         responses.add(
             responses.GET,
@@ -141,14 +126,6 @@ class TestCyclebot:
 
     @responses.activate
     def test_pitching_alerts(self):
-        empty = Schedule()
-        responses.add(
-            responses.GET,
-            self.yesterday_url,
-            match_querystring=True,
-            json=empty.serialized(),
-        )
-
         schedule = Schedule([self.game_key, 'live'])
         responses.add(
             responses.GET,
@@ -310,14 +287,6 @@ class TestCyclebot:
 
     @responses.activate
     def test_highlight_alert(self):
-        empty = Schedule()
-        responses.add(
-            responses.GET,
-            self.yesterday_url,
-            match_querystring=True,
-            json=empty.serialized(),
-        )
-
         schedule = Schedule([self.game_key, 'live'])
         responses.add(
             responses.GET,
@@ -463,14 +432,6 @@ class TestCyclebot:
 
     @responses.activate
     def test_cycle_alert(self):
-        empty = Schedule()
-        responses.add(
-            responses.GET,
-            self.yesterday_url,
-            match_querystring=True,
-            json=empty.serialized(),
-        )
-
         schedule = Schedule([self.game_key, 'live'])
         responses.add(
             responses.GET,
