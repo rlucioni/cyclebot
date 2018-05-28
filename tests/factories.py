@@ -108,16 +108,18 @@ class Player:
 
 
 class Play:
-    def __init__(self, batter_id, id=None, event='Single', captivating_index=0):
+    def __init__(self, batter_id, id=None, event='Single', rbi=0, captivating_index=0):
         self.batter_id = batter_id
         self.id = id or str(uuid4())
         self.event = event
+        self.rbi = rbi
         self.captivating_index = captivating_index
 
     def serialized(self):
         return {
             'result': {
                 'event': self.event,
+                'rbi': self.rbi,
             },
             'about': {
                 'startTime': '2018-04-13T14:09:57.000Z',

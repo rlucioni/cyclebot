@@ -333,22 +333,30 @@ class Cyclebot:
 
     def home_run_alert(self, play, batter):
         play_uuid = play['playEvents'][-1].get('playId')
+        rbis = play['result']['rbi']
+        runs = 'runs' if rbis > 1 else 'run'
+
         batter_id = batter['id']
         batter_name = batter['name']
+        batter_team = batter['team_name']
         hrs = batter['hrs']
 
         cache_key = self.make_key(play_uuid, batter_id)
         is_cached = bool(self.redis.get(cache_key))
 
         if is_cached:
-            logger.info(f'ignoring cached home run {play_uuid} {batter_name}')
+            logger.info(
+                f'ignoring cached home run: {play_uuid} {batter_name} ({batter_team}) for {rbis} {runs}'
+            )
             return
 
         self.redis.set(cache_key, 1, ex=REDIS_EXPIRE_SECONDS)
 
-        logger.info(f'new home run alert: {play_uuid} {batter_name}')
+        logger.info(f'new home run alert: {play_uuid} {batter_name} ({batter_team}) for {rbis} {runs}')
 
-        self.post_slack_message(f'HR ALERT: {batter_name} ({hrs} HR)')
+        self.post_slack_message(
+            f'HR ALERT: {batter_name} ({batter_team}) for {rbis} {runs} ({hrs} HR)'
+        )
 
     def seek_highlight(self, play, batter, hit_code, captivating_index):
         play_uuid = play['playEvents'][-1].get('playId')
@@ -366,7 +374,7 @@ class Cyclebot:
 
         if is_stale:
             logger.info(
-                'ignoring stale play '
+                'ignoring stale highlight '
                 f'{play_uuid} {batter_name} {hit_code} {captivating_index}, '
                 f'{seconds_elapsed} seconds elapsed'
             )
@@ -377,7 +385,7 @@ class Cyclebot:
 
         if is_cached:
             logger.info(
-                'ignoring cached play '
+                'ignoring cached highlight '
                 f'{play_uuid} {batter_name} {hit_code} {captivating_index}'
             )
             return

@@ -332,7 +332,7 @@ class TestCyclebot:
         alice = Player(101010, 'alice')
         bob = Player(202020, 'bob', season_stats=season_stats)
 
-        home_run = Play(bob.id, event='Home Run')
+        home_run = Play(bob.id, event='Home Run', rbi=2)
 
         feed = Feed(away=[alice, bob], home=[alice], plays=[home_run])
         responses.add(
@@ -364,7 +364,7 @@ class TestCyclebot:
             self.slack_url,
             self.slack_url,
         )
-        self.assert_slack(responses.calls[4], 'HR ALERT: bob (14 HR)')
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (New York Yankees) for 2 runs (14 HR)')
         self.assert_slack(responses.calls[5], '<https://www.example.com/123/2500K.mp4|something happened>')
         self.reset_calls()
 
@@ -396,7 +396,7 @@ class TestCyclebot:
             self.slack_url,
             self.slack_url,
         )
-        self.assert_slack(responses.calls[4], 'HR ALERT: bob (14 HR)')
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (New York Yankees) for 2 runs (14 HR)')
         self.assert_slack(responses.calls[5], '<https://www.example.com/123/2500K.mp4|something happened>')
         self.reset_calls()
 
@@ -419,7 +419,7 @@ class TestCyclebot:
             self.content_url,
             self.slack_url,
         )
-        self.assert_slack(responses.calls[4], 'HR ALERT: bob (14 HR)')
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (New York Yankees) for 2 runs (14 HR)')
         self.reset_calls()
 
         boring_play = Play(bob.id, captivating_index=10)
@@ -482,14 +482,17 @@ class TestCyclebot:
         batting = Batting()
         stats = Stats(batting=batting)
 
+        season_batting = Batting(home_runs=18)
+        season_stats = Stats(batting=season_batting)
+
         alice = Player(101010, 'alice')
-        bob = Player(202020, 'bob', stats=stats)
+        bob = Player(202020, 'bob', stats=stats, season_stats=season_stats)
 
         plays = []
         single = Play(bob.id, event='Single')
         double = Play(bob.id, event='Double')
         triple = Play(bob.id, event='Triple')
-        home_run = Play(bob.id, event='Home Run')
+        home_run = Play(bob.id, event='Home Run', rbi=1)
         strikeout = Play(bob.id, event='Strikeout')
 
         plays.append(single)
@@ -603,7 +606,7 @@ class TestCyclebot:
             self.slack_url,
             self.slack_url,
         )
-        self.assert_slack(responses.calls[4], 'HR ALERT: bob (0 HR)')
+        self.assert_slack(responses.calls[4], 'HR ALERT: bob (New York Yankees) for 1 run (18 HR)')
         self.assert_slack(
             responses.calls[5],
             'CYCLE ALERT: bob (New York Yankees) '
