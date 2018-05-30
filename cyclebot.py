@@ -260,7 +260,6 @@ class Cyclebot:
         is_cgso = is_alertable and not runs
 
         alert = None
-        adjective = None
         if is_no_hitter:
             alert = 'no-hitter'
             adjective = 'hitless'
@@ -329,12 +328,18 @@ class Cyclebot:
             is_favorite = batter_id in FAVORITE_PLAYER_IDS
 
             if any([is_hr, is_captivating, is_favorite]):
-                self.seek_highlight(play, batter, hit_code, captivating_index)
+                self.highlight_alert(play, batter, hit_code, captivating_index)
 
     def home_run_alert(self, play, batter):
         play_uuid = play['playEvents'][-1].get('playId')
         rbis = play['result']['rbi']
-        runs = 'runs' if rbis > 1 else 'run'
+
+        if rbis == 1:
+            alert = 'solo hr'
+        elif rbis == 4:
+            alert = 'grand slam hr'
+        else:
+            alert = f'{rbis}-run hr'
 
         batter_id = batter['id']
         batter_name = batter['name']
@@ -345,20 +350,18 @@ class Cyclebot:
         is_cached = bool(self.redis.get(cache_key))
 
         if is_cached:
-            logger.info(
-                f'ignoring cached home run: {play_uuid} {batter_name} ({batter_team}) for {rbis} {runs}'
-            )
+            logger.info(f'ignoring cached {alert}: {play_uuid} {batter_name} ({batter_team})')
             return
 
         self.redis.set(cache_key, 1, ex=REDIS_EXPIRE_SECONDS)
 
-        logger.info(f'new home run alert: {play_uuid} {batter_name} ({batter_team}) for {rbis} {runs}')
+        logger.info(f'new {alert} alert: {play_uuid} {batter_name} ({batter_team})')
 
         self.post_slack_message(
-            f'HR ALERT: {batter_name} ({batter_team}) for {rbis} {runs} ({hrs} HR)'
+            f'{alert.upper()} ALERT: {batter_name}, {batter_team} ({hrs} HR)'
         )
 
-    def seek_highlight(self, play, batter, hit_code, captivating_index):
+    def highlight_alert(self, play, batter, hit_code, captivating_index):
         play_uuid = play['playEvents'][-1].get('playId')
         if not play_uuid:
             start_time = play['about'].get('startTime')
