@@ -10,5 +10,5 @@ services:
     volumes:
       - "./redis/redis.conf:/etc/redis/redis.conf"
     command: "redis-server /etc/redis/redis.conf"
-    ports:  
+    ports:
      - "6379:6379"
